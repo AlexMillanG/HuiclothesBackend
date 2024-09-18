@@ -1,7 +1,10 @@
 package mx.edu.utez.huiclothes.models.user;
 
-import mx.edu.utez.huiclothes.models.rol.RoleBean;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UserRepository extends JpaRepository<RoleBean, Long> {
+import java.util.Optional;
+
+public interface UserRepository extends JpaRepository<UserBean, Long> {
+
+    Optional<UserBean> findByEmail(String email);
 }
