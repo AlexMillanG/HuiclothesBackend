@@ -21,13 +21,17 @@ public class UserController {
         return userService.findAll();
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/findById/{id}")
     public ResponseEntity<ApiResponse> findById(@PathVariable Long id){
         return userService.findById(id);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping ("/delete/{id}")
     public ResponseEntity<ApiResponse> delete (@PathVariable Long id){
         return userService.delete(id);
     }
+
+
 }
