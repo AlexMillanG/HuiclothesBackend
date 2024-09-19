@@ -6,10 +6,7 @@ import mx.edu.utez.huiclothes.services.user.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/user")
@@ -24,8 +21,17 @@ public class UserController {
         return userService.findAll();
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/findById/{id}")
     public ResponseEntity<ApiResponse> findById(@PathVariable Long id){
         return userService.findById(id);
     }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @DeleteMapping ("/delete/{id}")
+    public ResponseEntity<ApiResponse> delete (@PathVariable Long id){
+        return userService.delete(id);
+    }
+
+
 }
