@@ -22,4 +22,9 @@ public class UserService {
         return new ResponseEntity<>(new ApiResponse(repository.findAll(),HttpStatus.OK), HttpStatus.OK);
     }
 
+    @Transactional(rollbackFor = SQLException.class)
+    public ResponseEntity<ApiResponse> findById(Long id){
+        return new ResponseEntity<>(new ApiResponse(repository.findById(id),HttpStatus.OK), HttpStatus.OK);
+    }
+
 }
