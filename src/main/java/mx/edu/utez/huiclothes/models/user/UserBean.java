@@ -30,6 +30,7 @@ public class UserBean implements UserDetails {
     private String password;
 
 
+    
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name= "rol_id")
     private RoleBean rol;
