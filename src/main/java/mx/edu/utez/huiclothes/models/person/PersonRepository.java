@@ -1,0 +1,4 @@
+package mx.edu.utez.huiclothes.models.person;
+
+public interface PersonRepository {
+}
