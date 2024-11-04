@@ -16,7 +16,7 @@ public class UserController {
     private final UserService userService;
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    @PostMapping("/")
+    @GetMapping("/")
     public ResponseEntity<ApiResponse> findAll(){
         return userService.findAll();
     }

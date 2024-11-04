@@ -41,7 +41,7 @@ public class UserBean implements UserDetails {
 
     @Override
     public String getUsername() {
-        return "";
+        return this.email;
     }
 
     @Override
