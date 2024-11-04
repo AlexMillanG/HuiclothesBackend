@@ -27,8 +27,10 @@ public class AuthService {
 
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(),request.getPassword()));
         UserDetails user = repository.findByEmail(request.getEmail()).orElseThrow();
+
+        UserBean foundUser = repository.findByEmail(request.getEmail()).get();
         String token = jwtService.getToken(user);
-        return AuthResponse.builder().token(token).build();
+        return AuthResponse.builder().token(token).role(foundUser.getRol().getName()).password(foundUser.getPassword()).username(foundUser.getEmail()).build();
     }
 
     public AuthResponse register(RegisterRequest request){
