@@ -1,5 +1,5 @@
 package mx.edu.utez.huiclothes.models.user;
-
+//este es el bueno
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

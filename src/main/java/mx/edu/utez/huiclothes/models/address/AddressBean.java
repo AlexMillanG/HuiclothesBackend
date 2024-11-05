@@ -1,5 +1,5 @@
 package mx.edu.utez.huiclothes.models.address;
-
+//este es el bueno
 import jakarta.persistence.*;
 import lombok.Data;
 import mx.edu.utez.huiclothes.models.user.UserBean;

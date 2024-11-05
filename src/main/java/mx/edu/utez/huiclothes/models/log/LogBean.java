@@ -1,5 +1,5 @@
 package mx.edu.utez.huiclothes.models.log;
-
+//este es el bueno
 
 import jakarta.persistence.*;
 import lombok.Data;
