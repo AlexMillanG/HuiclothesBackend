@@ -1,6 +1,7 @@
 package mx.edu.utez.huiclothes.config;
 
 import lombok.RequiredArgsConstructor;
+import mx.edu.utez.huiclothes.models.user.UserBean;
 import mx.edu.utez.huiclothes.models.user.UserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -8,6 +9,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -40,10 +42,21 @@ public class ApplicationConfig {
         return new BCryptPasswordEncoder();
     }
 
+
     @Bean
     public UserDetailsService userDetailService() {
-        return username -> userRepository.findByEmail(username)
-                .orElseThrow(()-> new UsernameNotFoundException("User not found"));
+        return new UserDetailsService() {
+            @Override
+            public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+
+                UserBean userBean = userRepository.findByEmail(username).get();
+
+                System.err.println("application config: "+userBean.getEmail());
+                return userRepository.findByEmail(username)
+                        .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+            }
+        };
     }
+
 
 }
