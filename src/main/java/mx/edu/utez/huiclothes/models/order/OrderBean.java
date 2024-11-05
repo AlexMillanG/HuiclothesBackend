@@ -2,6 +2,7 @@ package mx.edu.utez.huiclothes.models.order;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import mx.edu.utez.huiclothes.models.log.LogBean;
 import mx.edu.utez.huiclothes.models.products.ProductBean;
 
 import java.time.LocalDate;
@@ -23,5 +24,8 @@ public class OrderBean {
 
     @ManyToMany(mappedBy = "orderBeans", cascade = CascadeType.MERGE)
     private Set<ProductBean> productBeans;
+
+    @OneToMany(mappedBy = "orderBean", cascade = CascadeType.ALL)
+    private Set<LogBean> logBeans;
 
 }

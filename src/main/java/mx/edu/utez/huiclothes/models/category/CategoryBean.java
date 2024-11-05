@@ -21,5 +21,9 @@ public class CategoryBean {
 
     @OneToMany(mappedBy = "categoryBean", cascade = CascadeType.ALL )
     private Set<ProductBean> productBeans;
+
+    @ManyToOne
+    @JoinColumn(name = "idUser")
+    private ProductBean productBean;
 }
 
