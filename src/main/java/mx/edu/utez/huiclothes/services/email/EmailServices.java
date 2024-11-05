@@ -18,9 +18,9 @@ public class EmailServices {
 
     public void sendMail(){
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo("alexmillanguillen@gmail.com");
+        message.setTo("20223tn077@utez.edu.mx");
         message.setSubject("prueba correos");
-        message.setText("jhjhkgkhjgkhjghgouhfouhghjgkng");
+        message.setText("Te amo amor de mi vida");
         message.setFrom("20223tn072@utez.edu.mx");
 
         mailSender.send(message);
