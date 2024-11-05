@@ -20,5 +20,8 @@ public class AddressBean {
     @Column(name = "name", length = 6)
     private String zip_code;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "idUser")
+    private AddressBean addressBean;
 
 }
