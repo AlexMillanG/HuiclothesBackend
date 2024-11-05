@@ -1,12 +1,11 @@
 package mx.edu.utez.huiclothes.models.category;
 
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import mx.edu.utez.huiclothes.models.products.ProductBean;
 
-import java.util.Set;
+import java.util.List;
 
 @Data
 @Entity
@@ -21,11 +20,6 @@ public class CategoryBean {
     private String name;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "categoryBean",fetch = FetchType.EAGER, cascade = CascadeType.ALL )
-    private Set<ProductBean> productBeans;
-
-    @ManyToOne
-    @JoinColumn(name = "idUser")
-    private ProductBean productBean;
+    @OneToMany(mappedBy = "category", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private List<ProductBean> productBeans;
 }
-

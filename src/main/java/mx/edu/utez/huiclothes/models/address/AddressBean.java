@@ -1,27 +1,31 @@
 package mx.edu.utez.huiclothes.models.address;
 
-
 import jakarta.persistence.*;
 import lombok.Data;
+import mx.edu.utez.huiclothes.models.user.UserBean;
 
 @Data
 @Entity
 @Table(name = "address")
 public class AddressBean {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @Column(name = "name", length = 50)
+
+    @Column(name = "street", length = 50)
     private String street;
-    @Column(name = "name", length = 45)
+
+    @Column(name = "country", length = 45)
     private String country;
-    @Column(name = "name", length = 45)
+
+    @Column(name = "state", length = 45)
     private String state;
-    @Column(name = "name", length = 6)
-    private String zip_code;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "idUser")
-    private AddressBean addressBean;
+    @Column(name = "zip_code", length = 6)
+    private String zipCode;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private UserBean userBean;
 }
