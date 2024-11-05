@@ -29,7 +29,7 @@ public class ProductBean {
     private LocalDate entry_date;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "idCategory", nullable = false)
+    @JoinColumn(name = "category_id", nullable = false)
     private CategoryBean category;
 
     @JsonIgnore
