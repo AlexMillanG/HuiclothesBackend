@@ -14,7 +14,7 @@ public class CategoryBean {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idCategory;
+    private Long idCategory;
 
     @Column(name = "name", length = 45)
     private String name;

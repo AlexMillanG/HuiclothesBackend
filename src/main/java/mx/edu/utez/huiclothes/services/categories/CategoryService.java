@@ -38,7 +38,7 @@ public class CategoryService {
 
     // Método para encontrar productos por categoría
     @Transactional(rollbackFor = {SQLException.class})
-    public ResponseEntity<ApiResponse> findProductsByCategory(Integer idCategory) {
+    public ResponseEntity<ApiResponse> findProductsByCategory(Long idCategory) {
         // Buscar la categoría por su ID
         Optional<CategoryBean> optionalCategory = categoryRepository.findById(idCategory);
         if (optionalCategory.isEmpty()) {
