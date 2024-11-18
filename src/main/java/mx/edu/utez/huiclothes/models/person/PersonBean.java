@@ -3,6 +3,7 @@ package mx.edu.utez.huiclothes.models.person;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import mx.edu.utez.huiclothes.models.user.UserBean;
 
 @Entity
 @Table(name = "person")
@@ -16,8 +17,11 @@ public class PersonBean {
     private String name;
     @Column(length = 100, nullable = false)
     private String lastname;
-    @Column(length = 100, nullable = false)
+    @Column(length = 100)
     private String surname;
 
+
+    @OneToOne(mappedBy = "person")
+    private UserBean user;
 
 }

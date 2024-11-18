@@ -22,8 +22,6 @@ public class ProductBean {
     @Column(length = 100, nullable = false)
     private String description;
     @Column (nullable = false)
-    private int quantity;
-    @Column (nullable = false)
     private double price;
     @Column(columnDefinition = "DATE", nullable = true)
     private LocalDate entry_date;

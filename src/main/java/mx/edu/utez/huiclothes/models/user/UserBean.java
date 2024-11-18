@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import mx.edu.utez.huiclothes.models.address.AddressBean;
 import mx.edu.utez.huiclothes.models.log.LogBean;
+import mx.edu.utez.huiclothes.models.person.PersonBean;
 import mx.edu.utez.huiclothes.models.rol.RoleBean;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -39,6 +40,16 @@ public class UserBean implements UserDetails {
     @JoinColumn(name= "rol_id")
     private RoleBean rol;
 
+    @OneToOne
+    @JoinColumn(name = "person_id")
+    private PersonBean person;
+
+
+
+
+
+
+    //chingaderas de seguridad
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(rol.getName()));
