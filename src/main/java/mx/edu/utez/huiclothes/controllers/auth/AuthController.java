@@ -2,6 +2,7 @@ package mx.edu.utez.huiclothes.controllers.auth;
 
 
 import lombok.RequiredArgsConstructor;
+import mx.edu.utez.huiclothes.config.ApiResponse;
 import mx.edu.utez.huiclothes.models.auth.AuthResponse;
 import mx.edu.utez.huiclothes.models.auth.LoginRequest;
 import mx.edu.utez.huiclothes.models.auth.RegisterRequest;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")
 @RequiredArgsConstructor
 
 public class AuthController {
@@ -26,7 +27,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest request){
-        return ResponseEntity.ok(service.register(request));
+    public ResponseEntity<ApiResponse> register(@RequestBody RegisterRequest request){
+        return service.register(request);
     }
 }

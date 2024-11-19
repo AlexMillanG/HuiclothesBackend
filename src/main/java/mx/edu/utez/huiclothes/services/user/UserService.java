@@ -2,6 +2,7 @@ package mx.edu.utez.huiclothes.services.user;
 
 import lombok.AllArgsConstructor;
 import mx.edu.utez.huiclothes.config.ApiResponse;
+import mx.edu.utez.huiclothes.models.person.PersonBean;
 import mx.edu.utez.huiclothes.models.rol.RoleBean;
 import mx.edu.utez.huiclothes.models.rol.RoleRepository;
 import mx.edu.utez.huiclothes.models.user.UserBean;
@@ -93,15 +94,19 @@ public class UserService {
     }
 
     @Transactional(rollbackFor = SQLException.class)
-    public ResponseEntity<ApiResponse> updateUser(UserBean userBean){
+    public ResponseEntity<ApiResponse> updateUser(UserBean userBean) {
 
         Optional<UserBean> foundUser = repository.findById(userBean.getId());
-
-        if (foundUser.isEmpty())
-            return new ResponseEntity<>(new ApiResponse("Error, el usuario que intentas actualizar no existe",true,HttpStatus.NOT_FOUND,null),HttpStatus.NOT_FOUND);
+        if (foundUser.isEmpty()) {
+            return new ResponseEntity<>(
+                    new ApiResponse("Error, el usuario que intentas actualizar no existe", true, HttpStatus.NOT_FOUND, null),
+                    HttpStatus.NOT_FOUND
+            );
+        }
 
         UserBean existingUser = foundUser.get();
 
+        // Validación de la contraseña
         if (userBean.getPassword().length() < 8) {
             return new ResponseEntity<>(
                     new ApiResponse("Error, la contraseña es menor a 8 caracteres", true, HttpStatus.BAD_REQUEST, null),
@@ -118,6 +123,7 @@ public class UserService {
             );
         }
 
+        // Validar si el rol existe
         Optional<RoleBean> foundRole = roleRepository.findById(userBean.getRol().getId());
         if (foundRole.isEmpty()) {
             return new ResponseEntity<>(
@@ -126,31 +132,42 @@ public class UserService {
             );
         }
 
-        if (userBean.getPerson().getName().equals("")   || userBean.getPerson().getName().equals(null))
-            return new ResponseEntity<>(new ApiResponse("inserta un nombre valido", true,HttpStatus.BAD_REQUEST,null),HttpStatus.BAD_REQUEST);
-
-        if (userBean.getPerson().getLastname().equals("")   || userBean.getPerson().getLastname().equals(null))
-            return new ResponseEntity<>(new ApiResponse("inserta un apellido  valido", true,HttpStatus.BAD_REQUEST,null),HttpStatus.BAD_REQUEST);
-
-
-
-        // Actualizar la información de UserBean
-        existingUser.setName(userBean.getName());
-        existingUser.setLastname(userBean.getLastname());
-        existingUser.setEmail(userBean.getEmail());
-        existingUser.setPassword(passwordEncoder.encode(userBean.getPassword()));
-
-        // Actualizar la información de PersonBean asociada
-        if (existingUser.getPerson() != null) {
-            existingUser.getPerson().setName(userBean.getPerson().getName());
-            existingUser.getPerson().setLastname(userBean.getPerson().getLastname());
-            existingUser.getPerson().setSurname(userBean.getPerson().getSurname());
+        // Validaciones para los campos de PersonBean
+        if (userBean.getPerson().getName() == null || userBean.getPerson().getName().trim().isEmpty()) {
+            return new ResponseEntity<>(
+                    new ApiResponse("Inserta un nombre válido", true, HttpStatus.BAD_REQUEST, null),
+                    HttpStatus.BAD_REQUEST
+            );
+        }
+        if (userBean.getPerson().getLastname() == null || userBean.getPerson().getLastname().trim().isEmpty()) {
+            return new ResponseEntity<>(
+                    new ApiResponse("Inserta un apellido válido", true, HttpStatus.BAD_REQUEST, null),
+                    HttpStatus.BAD_REQUEST
+            );
         }
 
+        // Actualizar la información de UserBean
+        existingUser.setEmail(userBean.getEmail());
+        existingUser.setPassword(passwordEncoder.encode(userBean.getPassword()));
         existingUser.setRol(foundRole.get());
 
-        return new ResponseEntity<>( new ApiResponse("Usuario guardado exitosamente", false, HttpStatus.OK, repository.save(existingUser)), HttpStatus.OK);
+        // Actualizar la información de PersonBean asociada
+        PersonBean existingPerson = existingUser.getPerson();
+        if (existingPerson != null) {
+            existingPerson.setName(userBean.getPerson().getName());
+            existingPerson.setLastname(userBean.getPerson().getLastname());
+            existingPerson.setSurname(
+                    userBean.getPerson().getSurname() != null ? userBean.getPerson().getSurname() : ""
+            );
+        }
 
+        // Guardar el usuario actualizado
+        repository.save(existingUser);
+
+        return new ResponseEntity<>(
+                new ApiResponse("Usuario actualizado exitosamente", false, HttpStatus.OK, existingUser),
+                HttpStatus.OK
+        );
     }
 
 

@@ -1,6 +1,8 @@
 package mx.edu.utez.huiclothes.config;
 
 
+import mx.edu.utez.huiclothes.models.category.CategoryBean;
+import mx.edu.utez.huiclothes.models.category.CategoryRepository;
 import mx.edu.utez.huiclothes.models.rol.RoleBean;
 import mx.edu.utez.huiclothes.models.rol.RoleRepository;
 import mx.edu.utez.huiclothes.models.user.UserBean;
@@ -26,8 +28,11 @@ public class InitialConfig {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private CategoryRepository repository;
+
     @Bean
-    public CommandLineRunner initData() {
+    public CommandLineRunner initData(CategoryRepository categoryRepository) {
         return args -> {
             // Crear rol ADMIN con ID 1 si no existe
             if (!rolRepository.existsById(1L)) {
@@ -68,6 +73,17 @@ public class InitialConfig {
 
                 userRepository.saveAndFlush(userBean);
             }
+
+            Optional<CategoryBean> foundCategory = categoryRepository.findByName("sneackers");
+
+            if (foundCategory.isEmpty()){
+                CategoryBean categoryBean = new CategoryBean();
+                categoryBean.setName("sneackers");
+                repository.saveAndFlush(categoryBean);
+                System.err.println("SE HA INSERTADO LA CATEGORÍA SNEACKERS");
+
+            }
+
 
         };
     }

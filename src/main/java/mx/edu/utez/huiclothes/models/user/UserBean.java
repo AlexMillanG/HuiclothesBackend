@@ -28,8 +28,6 @@ public class UserBean implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
-    private String lastname;
     private String email;
     private String password;
 

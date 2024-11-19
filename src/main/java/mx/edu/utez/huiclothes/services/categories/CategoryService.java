@@ -49,4 +49,10 @@ public class CategoryService {
         List<ProductBean> foundProducts = productRepository.findByCategory(optionalCategory.get());
         return new ResponseEntity<>(new ApiResponse("Products found", false, HttpStatus.OK, foundProducts), HttpStatus.OK);
     }
+
+
+    @Transactional(rollbackFor = {SQLException.class})
+    public ResponseEntity<ApiResponse> findAll(){
+        return new ResponseEntity<>(new ApiResponse(categoryRepository.findAll(),HttpStatus.OK),HttpStatus.OK);
+    }
 }
