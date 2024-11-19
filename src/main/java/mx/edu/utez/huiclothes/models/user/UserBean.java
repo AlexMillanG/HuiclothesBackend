@@ -1,10 +1,13 @@
 package mx.edu.utez.huiclothes.models.user;
-
+//este es el bueno
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import mx.edu.utez.huiclothes.models.address.AddressBean;
+import mx.edu.utez.huiclothes.models.log.LogBean;
+import mx.edu.utez.huiclothes.models.person.PersonBean;
 import mx.edu.utez.huiclothes.models.rol.RoleBean;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -12,6 +15,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -24,17 +28,27 @@ public class UserBean implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
-    private String lastname;
     private String email;
     private String password;
 
+    @OneToMany(mappedBy = "userBean", cascade = CascadeType.ALL)
+    private Set<AddressBean> addressBeans;
 
     
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name= "rol_id")
     private RoleBean rol;
 
+    @OneToOne
+    @JoinColumn(name = "person_id")
+    private PersonBean person;
+
+
+
+
+
+
+    //chingaderas de seguridad
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(rol.getName()));
@@ -42,7 +56,7 @@ public class UserBean implements UserDetails {
 
     @Override
     public String getUsername() {
-        return "";
+        return this.email;
     }
 
     @Override

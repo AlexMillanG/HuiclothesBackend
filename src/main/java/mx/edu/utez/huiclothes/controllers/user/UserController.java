@@ -9,14 +9,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("/user")
+@RequestMapping("/api/user")
 @RequiredArgsConstructor
 public class UserController {
 
     private final UserService userService;
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    @PostMapping("/")
+    @GetMapping("/")
     public ResponseEntity<ApiResponse> findAll(){
         return userService.findAll();
     }

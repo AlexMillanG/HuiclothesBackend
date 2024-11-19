@@ -2,6 +2,7 @@ package mx.edu.utez.huiclothes.models.image;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import mx.edu.utez.huiclothes.models.products.ProductBean;
 
 @Data
 @Entity
@@ -18,5 +19,5 @@ public class ImageBean {
 
     @ManyToOne
     @JoinColumn(name = "products_id_products")
-    private Product product;
+    private ProductBean productBean;
 }
