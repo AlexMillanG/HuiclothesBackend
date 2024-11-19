@@ -1,5 +1,5 @@
-package mx.edu.utez.huiclothes.models.address;
-//este es el bueno
+package mx.edu.utez.huiclothes.models.adrress;
+
 import jakarta.persistence.*;
 import lombok.Data;
 import mx.edu.utez.huiclothes.models.user.UserBean;
@@ -11,9 +11,9 @@ public class AddressBean {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Integer idAddress;
 
-    @Column(name = "street", length = 50)
+    @Column(name = "street", length = 45)
     private String street;
 
     @Column(name = "country", length = 45)
@@ -22,11 +22,11 @@ public class AddressBean {
     @Column(name = "state", length = 45)
     private String state;
 
-    @Column(name = "zip_code", length = 6)
+    @Column(name = "zip_code", length = 45)
     private String zipCode;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private UserBean userBean;
-
+    @ManyToOne
+    @JoinColumn(name = "user_iduser")
+    private UserBean user;
 }
+

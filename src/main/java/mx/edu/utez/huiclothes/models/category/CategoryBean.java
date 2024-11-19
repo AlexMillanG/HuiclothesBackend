@@ -7,6 +7,9 @@ import mx.edu.utez.huiclothes.models.products.ProductBean;
 
 import java.util.List;
 
+import jakarta.persistence.*;
+import lombok.Data;
+
 @Data
 @Entity
 @Table(name = "category")
@@ -19,7 +22,10 @@ public class CategoryBean {
     @Column(name = "name", length = 45)
     private String name;
 
+
     @JsonIgnore
     @OneToMany(mappedBy = "category", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<ProductBean> productBeans;
+
 }
+

@@ -10,4 +10,5 @@ public interface AddressRepository extends JpaRepository<AddressBean, Long> {
     List<AddressBean> findByCountry(String country);
     List<AddressBean> findByState(String state);
     List<AddressBean> findByZipCode(String zipCode);
+
 }

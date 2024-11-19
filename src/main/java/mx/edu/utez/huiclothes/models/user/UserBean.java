@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import mx.edu.utez.huiclothes.models.address.AddressBean;
-import mx.edu.utez.huiclothes.models.log.LogBean;
 import mx.edu.utez.huiclothes.models.rol.RoleBean;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -35,6 +34,7 @@ public class UserBean implements UserDetails {
     @OneToMany(mappedBy = "userBean", cascade = CascadeType.ALL)
     private Set<AddressBean> addressBeans;
 
+    
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name= "rol_id")
     private RoleBean rol;
