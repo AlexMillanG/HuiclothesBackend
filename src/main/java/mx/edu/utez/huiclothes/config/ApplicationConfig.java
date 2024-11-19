@@ -48,10 +48,6 @@ public class ApplicationConfig {
         return new UserDetailsService() {
             @Override
             public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-
-                UserBean userBean = userRepository.findByEmail(username).get();
-
-                System.err.println("application config: "+userBean.getEmail());
                 return userRepository.findByEmail(username)
                         .orElseThrow(() -> new UsernameNotFoundException("User not found"));
             }
