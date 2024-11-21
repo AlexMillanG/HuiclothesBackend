@@ -42,11 +42,26 @@ public class ColorService {
     }
 
     @Transactional(rollbackFor = SQLException.class)
-    public ResponseEntity<ApiResponse> save(ColorBean colorBean){
-        if (colorBean.getColorName().equals("") || colorBean.getColorName().equals(null))
-            return new ResponseEntity<>(new ApiResponse("Error, inserta un nombre de color valido",true,HttpStatus.NOT_FOUND,null),HttpStatus.NOT_FOUND);
-            return new ResponseEntity<>(new ApiResponse("Color guardado con exito",false,HttpStatus.OK,repository.saveAndFlush(colorBean)),HttpStatus.OK);
+    public ResponseEntity<ApiResponse> save(ColorBean colorBean) {
+        if (colorBean.getColorName() == null || colorBean.getColorName().trim().isEmpty()) {
+            return new ResponseEntity<>(
+                    new ApiResponse("Error, inserta un nombre de color válido", true, HttpStatus.BAD_REQUEST, null),
+                    HttpStatus.BAD_REQUEST);
+        }
+
+        Optional<ColorBean> existingColor = repository.findByColorName(colorBean.getColorName());
+        if (existingColor.isPresent()) {
+            return new ResponseEntity<>(
+                    new ApiResponse("Error, el color ya existe", true, HttpStatus.CONFLICT, null),
+                    HttpStatus.CONFLICT);
+        }
+
+        ColorBean savedColor = repository.saveAndFlush(colorBean);
+        return new ResponseEntity<>(
+                new ApiResponse("Color guardado con éxito", false, HttpStatus.OK, savedColor),
+                HttpStatus.OK);
     }
+
 
 
     @Transactional(rollbackFor = SQLException.class)
