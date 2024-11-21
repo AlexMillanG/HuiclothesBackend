@@ -63,7 +63,6 @@ public class StockControlService {
     }
 
 
-
     @Transactional(rollbackFor = SQLException.class)
     public ResponseEntity<ApiResponse> updateStock(StockControlBean stockControlBean){
         Optional<StockControlBean> foundStockControl = repository.findById(stockControlBean.getId());

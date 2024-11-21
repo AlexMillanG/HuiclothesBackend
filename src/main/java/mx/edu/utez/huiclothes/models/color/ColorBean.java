@@ -2,7 +2,10 @@ package mx.edu.utez.huiclothes.models.color;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import org.springframework.context.annotation.Bean;
+import mx.edu.utez.huiclothes.models.image.ImageBean;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "colors")
@@ -14,4 +17,7 @@ public class ColorBean {
     private Long id;
 
     private String colorName;
+
+    @OneToMany(mappedBy = "colorBean")
+    private Set<ImageBean> imageBeans = new HashSet<>();
 }
