@@ -35,10 +35,14 @@ public class ColorService {
     @Transactional(rollbackFor = SQLException.class)
     public ResponseEntity<ApiResponse> deleteById(Long id){
         Optional<ColorBean> foundColor = repository.findById(id);
-        if (foundColor.isEmpty())
+
+        if (foundColor.isEmpty()){
             return new ResponseEntity<>(new ApiResponse("Error, el color que intentas eliminar no existe",true,HttpStatus.NOT_FOUND,null),HttpStatus.NOT_FOUND);
+        }else {
+            ColorBean colorBean = foundColor.get();
             repository.deleteById(id);
-            return new ResponseEntity<>(new ApiResponse("color elinado con exito",HttpStatus.OK),HttpStatus.OK);
+            return new ResponseEntity<>(new ApiResponse("color elinado con exito",false,HttpStatus.OK,colorBean),HttpStatus.OK);
+        }
     }
 
     @Transactional(rollbackFor = SQLException.class)

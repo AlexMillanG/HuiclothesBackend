@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import mx.edu.utez.huiclothes.config.ApiResponse;
 import mx.edu.utez.huiclothes.models.size.SizeBean;
 import mx.edu.utez.huiclothes.models.size.SizeRepository;
+import org.hibernate.engine.jdbc.Size;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -39,8 +40,9 @@ public class SizeService {
         Optional<SizeBean> foundSize = repository.findById(id);
         if (foundSize.isEmpty())
         return new ResponseEntity<>(new ApiResponse("Error, la talla que intentas eliminar no existe",true,HttpStatus.NOT_FOUND,null),HttpStatus.NOT_FOUND);
+        SizeBean size = foundSize.get();
         repository.deleteById(id);
-        return new ResponseEntity<>(new ApiResponse("talla eliminado con exito",HttpStatus.OK),HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponse("talla " +size.getSizeName() + " eliminada con éxito",false,HttpStatus.OK, size),HttpStatus.OK);
     }
 
 

@@ -35,4 +35,9 @@ public class StockControlController {
         return service.delete(id);
     }
 
+    @GetMapping("/")
+    public ResponseEntity<ApiResponse> findAll() {
+        return service.findAll();
+    }
+
 }
