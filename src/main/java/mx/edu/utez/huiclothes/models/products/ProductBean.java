@@ -19,7 +19,7 @@ public class ProductBean {
     private Long id;
     @Column(length = 100, nullable = false)
     private String name;
-    @Column(length = 100, nullable = false)
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String description;
     @Column (nullable = false)
     private double price;
