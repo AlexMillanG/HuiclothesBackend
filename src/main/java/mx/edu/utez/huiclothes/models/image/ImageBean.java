@@ -15,7 +15,7 @@ public class ImageBean {
     private Integer idImages;
 
 
-    @Column(name = "image")
+    @Column(name = "image", columnDefinition = "LONGBLOB")
     private byte[] image;
 
     @ManyToOne
