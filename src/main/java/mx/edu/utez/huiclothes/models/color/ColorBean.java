@@ -18,6 +18,8 @@ public class ColorBean {
 
     private String colorName;
 
+    private String hex;
+
     @OneToMany(mappedBy = "colorBean")
     private Set<ImageBean> imageBeans = new HashSet<>();
 }
