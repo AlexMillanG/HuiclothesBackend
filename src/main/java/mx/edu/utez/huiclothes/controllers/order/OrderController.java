@@ -1,5 +1,6 @@
 package mx.edu.utez.huiclothes.controllers.order;
 
+import lombok.AllArgsConstructor;
 import mx.edu.utez.huiclothes.models.order.OrderBean;
 import mx.edu.utez.huiclothes.services.order.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,10 +12,10 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/orders")
-@CrossOrigin(origins = "*")
-public class OrderController {
+@CrossOrigin({"*"})
+@AllArgsConstructor
+public class  OrderController {
 
-    @Autowired
     private OrderService orderService;
 
     @GetMapping

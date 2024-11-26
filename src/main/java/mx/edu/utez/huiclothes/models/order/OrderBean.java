@@ -1,6 +1,6 @@
 package mx.edu.utez.huiclothes.models.order;
 
-import jakarta.persistence.*;
+import  jakarta.persistence.*;
 import lombok.Data;
 import mx.edu.utez.huiclothes.models.log.LogBean;
 import mx.edu.utez.huiclothes.models.products.ProductBean;
@@ -21,7 +21,7 @@ public class OrderBean {
     @Column (nullable = false)
     private double total;
     @Column(length = 100, nullable = false)
-    private String ordercol;
+    private String status;
 
     @ManyToMany(mappedBy = "orderBeans", cascade = CascadeType.MERGE)
     private Set<ProductBean> productBeans;
