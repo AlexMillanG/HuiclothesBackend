@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import mx.edu.utez.huiclothes.models.address.AddressBean;
 import mx.edu.utez.huiclothes.models.log.LogBean;
+import mx.edu.utez.huiclothes.models.order.OrderBean;
 import mx.edu.utez.huiclothes.models.person.PersonBean;
 import mx.edu.utez.huiclothes.models.rol.RoleBean;
 import org.springframework.security.core.GrantedAuthority;
@@ -44,6 +45,8 @@ public class UserBean implements UserDetails {
 
 
 
+    @OneToMany(mappedBy = "userBean", cascade = CascadeType.ALL)
+    private Set<OrderBean> orderBeans;
 
 
 
