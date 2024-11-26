@@ -55,4 +55,14 @@ public class CategoryService {
     public ResponseEntity<ApiResponse> findAll(){
         return new ResponseEntity<>(new ApiResponse(categoryRepository.findAll(),HttpStatus.OK),HttpStatus.OK);
     }
+
+
+    @Transactional(rollbackFor = {SQLException.class})
+    public ResponseEntity<ApiResponse> updateCategory(Long id){
+        Optional<CategoryBean> foundCategory = categoryRepository.findById(id);
+
+        if (foundCategory.isEmpty())
+            return  new ResponseEntity<>(new ApiResponse("category not found",true,HttpStatus.NOT_FOUND,null),HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(new ApiResponse("",false,HttpStatus.OK,foundCategory.get()),HttpStatus.OK);
+    }
 }

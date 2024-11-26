@@ -59,9 +59,18 @@ public class StockControlService {
         if (stockControlBean.getStock()<0L)
             return new ResponseEntity<>(new ApiResponse("error, ingresa una cantidad valida de stock",true,HttpStatus.NOT_FOUND,null), HttpStatus.NOT_FOUND);
 
-        return new ResponseEntity<>(new ApiResponse("stock guardado con éxito",false,HttpStatus.OK,repository.save(stockControlBean)), HttpStatus.OK);
+        StockControlBean savedStock = repository.save(stockControlBean);
+        ColorBean colorBean = foundColor.get();
+        SizeBean sizeBean = foundSize.get();
+        ProductBean productBean = foundProduct.get();
+        StockControlBean responseStock = new StockControlBean();
+        responseStock.setColor(colorBean);
+        responseStock.setProduct(productBean);
+        responseStock.setSize(sizeBean);
+        responseStock.setStock(stockControlBean.getStock());
+        responseStock.setId(savedStock.getId());
+        return new ResponseEntity<>(new ApiResponse("stock guardado con éxito",false,HttpStatus.OK,responseStock), HttpStatus.OK);
     }
-
 
 
     @Transactional(rollbackFor = SQLException.class)
@@ -86,6 +95,42 @@ public class StockControlService {
         if (stockControlBean.getStock()<0L)
             return new ResponseEntity<>(new ApiResponse("error, ingresa una cantidad valida de stock",true,HttpStatus.NOT_FOUND,null), HttpStatus.NOT_FOUND);
 
-        return new ResponseEntity<>(new ApiResponse("stock guardado con éxito",false,HttpStatus.OK,repository.saveAndFlush(stockControlBean)), HttpStatus.OK);
+
+        if (foundStockControl.get().getStock()<stockControlBean.getStock())
+            return new ResponseEntity<>(new ApiResponse("error, no hay suficiente stock para la compra",true,HttpStatus.NOT_FOUND,null), HttpStatus.NOT_FOUND);
+
+        repository.saveAndFlush(stockControlBean);
+        StockControlBean responseStock = new StockControlBean();
+
+        ColorBean colorBean = foundColor.get();
+        SizeBean sizeBean = foundSize.get();
+        ProductBean productBean = foundProduct.get();
+
+        responseStock.setStock(stockControlBean.getStock());
+        responseStock.setProduct(productBean);
+        responseStock.setColor(colorBean);
+        responseStock.setSize(sizeBean);
+
+        return new ResponseEntity<>(new ApiResponse("stock guardado con éxito",false,HttpStatus.OK,responseStock), HttpStatus.OK);
     }
+
+
+    @Transactional(rollbackFor = SQLException.class)
+    public ResponseEntity<ApiResponse> delete(Long id){
+        Optional<StockControlBean> foundStockControl = repository.findById(id);
+
+        if (foundStockControl.isEmpty())
+            return new ResponseEntity<>(new ApiResponse("error, los registros de stock, no existen",true,HttpStatus.NOT_FOUND,null), HttpStatus.NOT_FOUND);
+        StockControlBean stockControlBean = foundStockControl.get();
+
+        repository.deleteById(id);
+            return new ResponseEntity<>(new ApiResponse("registro de stock eliminado",false,HttpStatus.OK,stockControlBean),HttpStatus.OK);
+    }
+
+
+    @Transactional(rollbackFor = SQLException.class)
+    public ResponseEntity<ApiResponse> findAll(){
+        return new ResponseEntity<>(new ApiResponse(repository.findAll(),HttpStatus.OK), HttpStatus.OK);
+    }
+
 }

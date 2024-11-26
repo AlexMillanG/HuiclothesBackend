@@ -47,8 +47,9 @@ public class ProductService {
         if (foundProduct.isEmpty())
         return new ResponseEntity<>(new ApiResponse("error, el producto que intentas eliminar no exite", true,HttpStatus.NOT_FOUND,null),HttpStatus.NOT_FOUND);
 
+        ProductBean productBean = foundProduct.get();
         repository.deleteById(id);
-        return new ResponseEntity<>(new ApiResponse("producto eliminado con exito", HttpStatus.OK),HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponse("producto " +productBean.getName() + " eliminado con éxito",false ,HttpStatus.OK,productBean),HttpStatus.OK);
     }
 
     //save
@@ -101,6 +102,10 @@ public class ProductService {
         return new ResponseEntity<>(new ApiResponse(repository.findByCategory(categoryBean),HttpStatus.OK),HttpStatus.OK);
 
     }
+
+
+
+
 
 
 }
