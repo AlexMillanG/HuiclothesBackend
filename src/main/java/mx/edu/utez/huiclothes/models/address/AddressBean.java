@@ -11,7 +11,7 @@ public class AddressBean {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Column(name = "street", length = 50)
     private String street;

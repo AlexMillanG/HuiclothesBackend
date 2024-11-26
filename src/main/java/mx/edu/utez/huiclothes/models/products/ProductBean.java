@@ -23,18 +23,12 @@ public class ProductBean {
     private String description;
     @Column (nullable = false)
     private double price;
-    @Column(columnDefinition = "DATE", nullable = true)
+    @Column(columnDefinition = "DATE")
     private LocalDate entry_date;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id", nullable = false)
     private CategoryBean category;
 
-    @JsonIgnore
-    @ManyToMany
-    @JoinTable(name = "products_has_orders",
-            joinColumns = @JoinColumn(name = "product_id"),
-            inverseJoinColumns = @JoinColumn(name = "order_id"))
-    private Set<OrderBean> orderBeans;
 
 }
