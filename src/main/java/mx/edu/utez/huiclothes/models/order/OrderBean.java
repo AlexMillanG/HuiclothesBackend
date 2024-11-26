@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import mx.edu.utez.huiclothes.models.log.LogBean;
 import mx.edu.utez.huiclothes.models.products.ProductBean;
+import mx.edu.utez.huiclothes.models.user.UserBean;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -27,5 +28,9 @@ public class OrderBean {
 
     @OneToMany(mappedBy = "orderBean", cascade = CascadeType.ALL)
     private Set<LogBean> logBeans;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private UserBean userBean;
 
 }

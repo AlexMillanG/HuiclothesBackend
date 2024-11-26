@@ -1,11 +1,12 @@
 package mx.edu.utez.huiclothes.models.order;
 
+import mx.edu.utez.huiclothes.models.order.OrderBean;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
+import java.util.List;
 
-@Repository
 public interface OrderRepository extends JpaRepository<OrderBean, Long> {
-    Optional<OrderBean> findById(Long id);
+
+    // Consulta personalizada para buscar órdenes por estado
+    List<OrderBean> findByStatus(String status);
 }
