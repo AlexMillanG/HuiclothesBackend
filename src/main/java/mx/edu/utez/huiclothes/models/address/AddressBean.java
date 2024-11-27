@@ -28,18 +28,31 @@ public class AddressBean {
     @Column(name = "zip_code", length = 6)
     private String zipCode;
 
+    private String phoneNumber;
 
-    public AddressBean(Long id, String street, String country, String state, String zipCode, UserBean userBean) {
-        this.id = id;
-        this.street = street;
-        this.country = country;
-        this.state = state;
-        this.zipCode = zipCode;
-        this.userBean = userBean;
-    }
+    private String neighborhood;
+
+    private String fullName;
+
+    private String province;
+
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     @JsonIgnore
     private UserBean userBean;
+
+    public AddressBean(Long id, String street, String country, String state, String zipCode, String phoneNumber, String neighborhood, String fullName,String province, UserBean userBean) {
+        this.id = id;
+        this.street = street;
+        this.country = country;
+        this.state = state;
+        this.zipCode = zipCode;
+        this.phoneNumber = phoneNumber;
+        this.neighborhood = neighborhood;
+        this.fullName = fullName;
+        this.province = province;
+        this.userBean = userBean;
+    }
 }

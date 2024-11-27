@@ -2,14 +2,13 @@ package mx.edu.utez.huiclothes.models.order;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import mx.edu.utez.huiclothes.models.address.AddressBean;
 import mx.edu.utez.huiclothes.models.log.LogBean;
-import mx.edu.utez.huiclothes.models.products.ProductBean;
 import mx.edu.utez.huiclothes.models.stockControl.StockControlBean;
 import mx.edu.utez.huiclothes.models.user.UserBean;
 
 import java.time.LocalDate;
 import java.util.*;
-//este es el bueno
 @Entity
 @Table(name = "orders")
 @Data
@@ -33,5 +32,9 @@ public class OrderBean {
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private UserBean userBean;
+
+    @ManyToOne
+    @JoinColumn(name = "address_id", nullable = false)
+    private AddressBean addressBean;
 
 }

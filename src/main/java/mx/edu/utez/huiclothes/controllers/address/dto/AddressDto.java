@@ -12,10 +12,14 @@ public class AddressDto {
     String country;
     String state;
     String zipCode;
+    String phoneNumber;
+    String neighborhood;
+    String fullName;
+    String province;
 
     UserBean userBean;
 
     public AddressBean toEntity(){
-        return  new AddressBean(id,street,country,state,zipCode,userBean);
+        return  new AddressBean(id,street,country,state,zipCode,phoneNumber,neighborhood,fullName,province,userBean);
     }
 }

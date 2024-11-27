@@ -63,7 +63,7 @@ public class ProductController {
         productBean.setName(dto.getName());
         productBean.setDescription(dto.getDescription());
         productBean.setPrice(dto.getPrice());
-        productBean.setGender(gender); 
+        productBean.setGender(gender);
         productBean.setCategory(dto.getCategory());
 
 

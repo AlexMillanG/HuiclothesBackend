@@ -2,6 +2,8 @@ package mx.edu.utez.huiclothes.services.order;
 
 import lombok.AllArgsConstructor;
 import mx.edu.utez.huiclothes.config.ApiResponse;
+import mx.edu.utez.huiclothes.models.address.AddressBean;
+import mx.edu.utez.huiclothes.models.address.AddressRepository;
 import mx.edu.utez.huiclothes.models.color.ColorRepository;
 import mx.edu.utez.huiclothes.models.order.OrderBean;
 import mx.edu.utez.huiclothes.models.order.OrderRepository;
@@ -33,15 +35,21 @@ public class OrderService {
     private final ColorRepository colorRepository;
     private final SizeRepository sizeRepository;
     private final UserRepository userRepository;
+    private final AddressRepository addressRepository;
 
     @Transactional(rollbackFor = SQLException.class)
     public ResponseEntity<ApiResponse> saveOrder(OrderBean orderBean) {
+
 
 
         Optional<UserBean> foundUser = userRepository.findById(orderBean.getUserBean().getId());
         if (foundUser.isEmpty())
             return new ResponseEntity<>(new ApiResponse("error, el usuario que intenta crear la orden, no existe",true,HttpStatus.NOT_FOUND,null), HttpStatus.NOT_FOUND);
 
+
+        Optional<AddressBean> foundAddress = addressRepository.findById(orderBean.getAddressBean().getId());
+        if (foundAddress.isEmpty())
+            return new ResponseEntity<>(new ApiResponse("error, la dirección que intentas asociar a la orden",true,HttpStatus.NOT_FOUND,null), HttpStatus.NOT_FOUND);
 
 
         List<StockControlBean> updatedStockControls = new ArrayList<>();

@@ -42,6 +42,19 @@ public class AddressService {
         if (addressBean.getZipCode().length()<5 || addressBean.getZipCode().length()>5) //62460
             return new ResponseEntity<>(new ApiResponse("ingresa un codigo postal valido", false, HttpStatus.BAD_REQUEST, null), HttpStatus.BAD_REQUEST);
 
+        if (addressBean.getNeighborhood().equals("") || addressBean.getNeighborhood().equals(null))
+            return new ResponseEntity<>(new ApiResponse("ingresa un estado valido", false, HttpStatus.BAD_REQUEST, null), HttpStatus.BAD_REQUEST);
+
+        if (addressBean.getPhoneNumber().equals("") || addressBean.getPhoneNumber().equals(null)  || addressBean.getPhoneNumber().length()>10 || addressBean.getPhoneNumber().length()<10)
+            return new ResponseEntity<>(new ApiResponse("ingresa un telefono valido", false, HttpStatus.BAD_REQUEST, null), HttpStatus.BAD_REQUEST);
+
+        if (addressBean.getFullName().equals("") || addressBean.getFullName().equals(null))
+            return new ResponseEntity<>(new ApiResponse("ingresa un nombre completo para la orden, valido", false, HttpStatus.BAD_REQUEST, null), HttpStatus.BAD_REQUEST);
+
+
+        if (addressBean.getProvince().equals("") || addressBean.getProvince().equals(null))
+            return new ResponseEntity<>(new ApiResponse("ingresa una provincia (municipio) valido", false, HttpStatus.BAD_REQUEST, null), HttpStatus.BAD_REQUEST);
+
         AddressBean savedAddress = addressRepository.save(addressBean);
         return new ResponseEntity<>(new ApiResponse("Address created", false, HttpStatus.OK, savedAddress), HttpStatus.OK);
     }
@@ -74,6 +87,18 @@ public class AddressService {
 
         if (addressBean.getZipCode().length()<5 || addressBean.getZipCode().length()>5) //62460
             return new ResponseEntity<>(new ApiResponse("ingresa un codigo postal valido", false, HttpStatus.BAD_REQUEST, null), HttpStatus.BAD_REQUEST);
+
+        if (addressBean.getNeighborhood().equals("") || addressBean.getNeighborhood().equals(null))
+            return new ResponseEntity<>(new ApiResponse("ingresa un estado valido", false, HttpStatus.BAD_REQUEST, null), HttpStatus.BAD_REQUEST);
+
+        if (addressBean.getPhoneNumber().equals("") || addressBean.getPhoneNumber().equals(null)  || addressBean.getPhoneNumber().length()>10 || addressBean.getPhoneNumber().length()<10)
+            return new ResponseEntity<>(new ApiResponse("ingresa un telefono valido (10 caractéres)", false, HttpStatus.BAD_REQUEST, null), HttpStatus.BAD_REQUEST);
+
+        if (addressBean.getFullName().equals("") || addressBean.getFullName().equals(null))
+            return new ResponseEntity<>(new ApiResponse("ingresa un nombre completo para la orden, valido", false, HttpStatus.BAD_REQUEST, null), HttpStatus.BAD_REQUEST);
+
+        if (addressBean.getProvince().equals("") || addressBean.getProvince().equals(null))
+            return new ResponseEntity<>(new ApiResponse("ingresa una provincia (municipio) valido", false, HttpStatus.BAD_REQUEST, null), HttpStatus.BAD_REQUEST);
 
         AddressBean savedAddress = addressRepository.save(addressBean);
         return new ResponseEntity<>(new ApiResponse("Address created", false, HttpStatus.OK, savedAddress), HttpStatus.OK);
