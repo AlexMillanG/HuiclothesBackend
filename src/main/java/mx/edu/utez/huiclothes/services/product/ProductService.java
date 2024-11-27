@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import mx.edu.utez.huiclothes.config.ApiResponse;
 import mx.edu.utez.huiclothes.models.category.CategoryBean;
 import mx.edu.utez.huiclothes.models.category.CategoryRepository;
+import mx.edu.utez.huiclothes.models.products.Gender;
 import mx.edu.utez.huiclothes.models.products.ProductBean;
 import mx.edu.utez.huiclothes.models.products.ProductRepository;
 import org.springframework.http.HttpStatus;
@@ -55,6 +56,14 @@ public class ProductService {
     //save
     @Transactional(rollbackFor = SQLException.class)
     public ResponseEntity<ApiResponse> save(ProductBean productBean){
+
+        System.err.println(productBean.getGender().toString());
+        try {
+            Gender gender = Gender.valueOf(productBean.getGender().toString().toUpperCase()); // Asumimos que el campo gender es un String en la entidad ProductBean
+            productBean.setGender(gender); // Establecer el género válido
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(new ApiResponse("error, el valor de género es inválido. Los valores válidos son: MALE, FEMALE, UNISEX", true, HttpStatus.BAD_REQUEST, null), HttpStatus.BAD_REQUEST);
+        }
 
         productBean.setEntry_date(LocalDate.now());
         if (productBean.getPrice()<0L)

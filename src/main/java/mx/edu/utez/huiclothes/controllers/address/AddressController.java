@@ -34,9 +34,6 @@ public class AddressController {
 
     @PutMapping("/update")
     public ResponseEntity<ApiResponse> update(@RequestBody AddressDto addressBean) {
-        System.err.println(addressBean);
-        System.err.println(addressBean.getUserBean());
-
         return addressService.updateAddress(addressBean.toEntity());
     }
 

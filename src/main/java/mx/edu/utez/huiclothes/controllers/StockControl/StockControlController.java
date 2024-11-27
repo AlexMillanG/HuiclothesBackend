@@ -40,4 +40,9 @@ public class StockControlController {
         return service.findAll();
     }
 
+    @GetMapping("/findOne/{id}")
+    public ResponseEntity<ApiResponse> findOne(@PathVariable Long id){
+        return service.findOne(id);
+    }
+
 }

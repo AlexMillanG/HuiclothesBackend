@@ -26,6 +26,10 @@ public class ProductBean {
     @Column(columnDefinition = "DATE")
     private LocalDate entry_date;
 
+    @Enumerated(EnumType.STRING)
+    @Column(length = 10, nullable = false)
+    private Gender gender;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id", nullable = false)
     private CategoryBean category;

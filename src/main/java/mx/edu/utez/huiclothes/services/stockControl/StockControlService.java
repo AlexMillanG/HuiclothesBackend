@@ -133,4 +133,13 @@ public class StockControlService {
         return new ResponseEntity<>(new ApiResponse(repository.findAll(),HttpStatus.OK), HttpStatus.OK);
     }
 
+    @Transactional(rollbackFor = SQLException.class)
+    public ResponseEntity<ApiResponse> findOne(Long id){
+        Optional<StockControlBean> foundStock = repository.findById(id);
+
+        if (foundStock.isEmpty())
+            return new ResponseEntity<>(new ApiResponse("no se econtró el registro de stock",false,HttpStatus.NOT_FOUND,null),HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(new ApiResponse(foundStock.get(),HttpStatus.OK),HttpStatus.OK);
+    }
+
 }
