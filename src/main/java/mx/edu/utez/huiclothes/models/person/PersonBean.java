@@ -1,13 +1,17 @@
 package mx.edu.utez.huiclothes.models.person;
 //este es el bueno
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import mx.edu.utez.huiclothes.models.user.UserBean;
 
 @Entity
 @Table(name = "person")
 @Data
+@EqualsAndHashCode(exclude = {"user"})
+
 public class PersonBean {
 
     @Id
@@ -20,7 +24,7 @@ public class PersonBean {
     @Column(length = 100)
     private String surname;
 
-
+    @JsonIgnore
     @OneToOne(mappedBy = "person")
     private UserBean user;
 

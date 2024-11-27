@@ -42,8 +42,10 @@ public class AuthService {
         return AuthResponse.builder().token(token).role(foundUser.getRol().getName()).password(foundUser.getPassword()).username(foundUser.getEmail()).build();
     }
 
-    public ResponseEntity<ApiResponse> register(RegisterRequest request){
 
+
+    public ResponseEntity<ApiResponse> register(RegisterRequest request) {
+        // Validación: longitud de la contraseña
         if (request.getPassword().length() < 8) {
             return new ResponseEntity<>(
                     new ApiResponse("Error, la contraseña es menor a 8 caracteres", true, HttpStatus.BAD_REQUEST, null),
@@ -51,7 +53,7 @@ public class AuthService {
             );
         }
 
-        // Validación del formato del email usando una expresión regular
+        // Validación: formato del email usando una expresión regular
         String emailRegex = "^[\\w-\\.]+@[\\w-]+\\.[a-zA-Z]{2,}$";
         if (!request.getEmail().matches(emailRegex)) {
             return new ResponseEntity<>(
@@ -60,36 +62,65 @@ public class AuthService {
             );
         }
 
-        if (request.getName().equals("")   || request.getName().equals(null))
-            return new ResponseEntity<>(new ApiResponse("inserta un nombre valido", true,HttpStatus.BAD_REQUEST,null),HttpStatus.BAD_REQUEST);
+        // Validación: nombre no vacío
+        if (request.getName() == null || request.getName().isEmpty()) {
+            return new ResponseEntity<>(
+                    new ApiResponse("Inserta un nombre válido", true, HttpStatus.BAD_REQUEST, null),
+                    HttpStatus.BAD_REQUEST
+            );
+        }
 
-        if (request.getLastname().equals("")   || request.getLastname().equals(null))
-            return new ResponseEntity<>(new ApiResponse("inserta un apellido  valido", true,HttpStatus.BAD_REQUEST,null),HttpStatus.BAD_REQUEST);
+        // Validación: apellido no vacío
+        if (request.getLastname() == null || request.getLastname().isEmpty()) {
+            return new ResponseEntity<>(
+                    new ApiResponse("Inserta un apellido válido", true, HttpStatus.BAD_REQUEST, null),
+                    HttpStatus.BAD_REQUEST
+            );
+        }
 
+        // Validación: verificar si el email ya existe
         Optional<UserBean> foundEmail = repository.findByEmail(request.getEmail());
+        if (foundEmail.isPresent()) {
+            return new ResponseEntity<>(
+                    new ApiResponse("Ya existe un usuario registrado con ese email", true, HttpStatus.BAD_REQUEST, null),
+                    HttpStatus.BAD_REQUEST
+            );
+        }
 
-        if (foundEmail.isPresent())
-            return new ResponseEntity<>(new ApiResponse("ya existe un usuario registrado con ese email", true,HttpStatus.BAD_REQUEST,null),HttpStatus.BAD_REQUEST);
-
+        // Creación del rol (puede ser mejorado si usas roles predefinidos en la BD)
         RoleBean roleBean = new RoleBean();
         roleBean.setId(3L);
 
+        // Crear la persona asociada al usuario
         PersonBean personBean = new PersonBean();
         personBean.setName(request.getName());
         personBean.setLastname(request.getLastname());
         personBean.setSurname(request.getSurname());
 
+        // Guardar persona en la base de datos
         PersonBean savedPerson = personRepository.save(personBean);
 
-
+        // Crear el usuario asociado a la persona
         UserBean user = new UserBean();
         user.setRol(roleBean);
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setPerson(savedPerson);
 
-        repository.saveAndFlush(user);
+        // Guardar el usuario en la base de datos
+        UserBean savedUser = repository.saveAndFlush(user);
 
-        return new ResponseEntity<>(new ApiResponse("usuario registrado con exito",false,HttpStatus.OK,jwtService.getToken(user),foundEmail.get().getId()),HttpStatus.OK);
+        // Devolver la respuesta con el token y el ID del usuario recién creado
+        return new ResponseEntity<>(
+                new ApiResponse(
+                        "Usuario registrado con éxito",
+                        false,
+                        HttpStatus.OK,
+                        jwtService.getToken(savedUser),
+                        savedUser.getId() // Usamos el ID del usuario recién creado
+                ),
+                HttpStatus.OK
+        );
     }
+
 }

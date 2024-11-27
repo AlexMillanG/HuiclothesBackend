@@ -2,6 +2,7 @@ package mx.edu.utez.huiclothes.controllers.address;
 
 import lombok.AllArgsConstructor;
 import mx.edu.utez.huiclothes.config.ApiResponse;
+import mx.edu.utez.huiclothes.controllers.address.dto.AddressDto;
 import mx.edu.utez.huiclothes.models.address.AddressBean;
 import mx.edu.utez.huiclothes.services.address.AddressService;
 import org.springframework.http.ResponseEntity;
@@ -26,13 +27,17 @@ public class AddressController {
     }
 
     @PostMapping("/save")
-    public ResponseEntity<ApiResponse> save(@RequestBody AddressBean addressBean) {
-        return addressService.createAddress(addressBean);
+    public ResponseEntity<ApiResponse> save(@RequestBody AddressDto addressBean) {
+        System.err.println(addressBean.getUserBean());
+        return addressService.createAddress(addressBean.toEntity());
     }
 
     @PutMapping("/update")
-    public ResponseEntity<ApiResponse> update(@RequestBody AddressBean addressBean) {
-        return addressService.updateAddress(addressBean);
+    public ResponseEntity<ApiResponse> update(@RequestBody AddressDto addressBean) {
+        System.err.println(addressBean);
+        System.err.println(addressBean.getUserBean());
+
+        return addressService.updateAddress(addressBean.toEntity());
     }
 
     

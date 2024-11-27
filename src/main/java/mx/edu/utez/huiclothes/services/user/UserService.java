@@ -34,6 +34,10 @@ public class UserService {
 
     @Transactional(rollbackFor = SQLException.class)
     public ResponseEntity<ApiResponse> findById(Long id){
+        Optional<UserBean> foundUser = repository.findById(id);
+        if (foundUser.isEmpty())
+            return new ResponseEntity<>(new ApiResponse("usuario no encontrado",true,HttpStatus.NOT_FOUND,null,null),HttpStatus.NOT_FOUND);
+
         return new ResponseEntity<>(new ApiResponse(repository.findById(id),HttpStatus.OK), HttpStatus.OK);
     }
 

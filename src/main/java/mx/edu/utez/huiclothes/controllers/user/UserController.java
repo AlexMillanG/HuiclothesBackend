@@ -21,7 +21,6 @@ public class UserController {
         return userService.findAll();
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/findById/{id}")
     public ResponseEntity<ApiResponse> findById(@PathVariable Long id){
         return userService.findById(id);

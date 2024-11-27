@@ -3,6 +3,7 @@ package mx.edu.utez.huiclothes.models.rol;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import mx.edu.utez.huiclothes.models.user.UserBean;
 
 import java.util.Set;
@@ -10,6 +11,8 @@ import java.util.Set;
 @Entity
 @Table(name = "role")
 @Data
+@EqualsAndHashCode(exclude = {"users"})
+
 public class RoleBean {
 
     @Id
