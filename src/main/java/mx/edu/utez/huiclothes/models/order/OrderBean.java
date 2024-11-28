@@ -1,5 +1,6 @@
 package mx.edu.utez.huiclothes.models.order;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import mx.edu.utez.huiclothes.models.address.AddressBean;

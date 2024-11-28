@@ -11,7 +11,6 @@ import java.util.Set;
 @Entity
 @Table(name = "role")
 @Data
-@EqualsAndHashCode(exclude = {"users"})
 
 public class RoleBean {
 
@@ -21,7 +20,6 @@ public class RoleBean {
 
     private String name;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "rol",fetch = FetchType.EAGER)
     private Set<UserBean> users;
 

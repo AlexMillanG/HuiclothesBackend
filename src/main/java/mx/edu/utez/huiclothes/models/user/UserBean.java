@@ -20,7 +20,7 @@ import java.util.Set;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(exclude = {"addressBeans", "rol", "person"})
+@EqualsAndHashCode(exclude = {"addressBeans"})
 
 public class UserBean implements UserDetails {
     @Id

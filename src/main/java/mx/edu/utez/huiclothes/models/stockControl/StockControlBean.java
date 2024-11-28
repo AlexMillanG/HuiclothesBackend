@@ -23,15 +23,15 @@ public class StockControlBean {
 
     private Long stock;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "products_id_products")
     private ProductBean product;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "size_id_size")
     private SizeBean size;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "colors_id_colors")
     private ColorBean color;
 

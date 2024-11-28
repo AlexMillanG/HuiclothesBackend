@@ -2,17 +2,20 @@ package mx.edu.utez.huiclothes.services.order;
 
 import lombok.AllArgsConstructor;
 import mx.edu.utez.huiclothes.config.ApiResponse;
+import mx.edu.utez.huiclothes.controllers.address.dto.AddressDto;
 import mx.edu.utez.huiclothes.models.address.AddressBean;
 import mx.edu.utez.huiclothes.models.address.AddressRepository;
 import mx.edu.utez.huiclothes.models.color.ColorRepository;
 import mx.edu.utez.huiclothes.models.order.OrderBean;
 import mx.edu.utez.huiclothes.models.order.OrderRepository;
+import mx.edu.utez.huiclothes.models.order.dto.OrderDto;
 import mx.edu.utez.huiclothes.models.products.ProductRepository;
 import mx.edu.utez.huiclothes.models.size.SizeRepository;
 import mx.edu.utez.huiclothes.models.stockControl.StockControlBean;
 import mx.edu.utez.huiclothes.models.stockControl.StockControlRepository;
 import mx.edu.utez.huiclothes.models.user.UserBean;
 import mx.edu.utez.huiclothes.models.user.UserRepository;
+import mx.edu.utez.huiclothes.models.user.dto.UserDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -41,16 +44,17 @@ public class OrderService {
     public ResponseEntity<ApiResponse> saveOrder(OrderBean orderBean) {
 
 
-
         Optional<UserBean> foundUser = userRepository.findById(orderBean.getUserBean().getId());
         if (foundUser.isEmpty())
             return new ResponseEntity<>(new ApiResponse("error, el usuario que intenta crear la orden, no existe",true,HttpStatus.NOT_FOUND,null), HttpStatus.NOT_FOUND);
 
+        UserDto userDto = new UserDto(foundUser.get());
 
         Optional<AddressBean> foundAddress = addressRepository.findById(orderBean.getAddressBean().getId());
         if (foundAddress.isEmpty())
             return new ResponseEntity<>(new ApiResponse("error, la dirección que intentas asociar a la orden",true,HttpStatus.NOT_FOUND,null), HttpStatus.NOT_FOUND);
 
+        AddressDto addressDto = new AddressDto(foundAddress.get());
 
         List<StockControlBean> updatedStockControls = new ArrayList<>();
         double total = 0;
@@ -93,11 +97,16 @@ public class OrderService {
 
         OrderBean savedOrder = repository.save(orderBean);
 
+
+        OrderDto orderDto = new OrderDto(savedOrder,addressDto,userDto,savedOrder.getStockControlBeans());  // Convierte la orden guardada a un DTO
+
+
+        System.err.println("antes del return");
         return new ResponseEntity<>(new ApiResponse(
                 "Orden guardada con éxito.",
                 false,
                 HttpStatus.CREATED,
-                savedOrder
+                orderDto
         ), HttpStatus.CREATED);
     }
 
