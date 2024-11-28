@@ -39,7 +39,7 @@ public class AuthService {
 
         UserBean foundUser = repository.findByEmail(request.getEmail()).get();
         String token = jwtService.getToken(user);
-        return AuthResponse.builder().token(token).role(foundUser.getRol().getName()).password(foundUser.getPassword()).username(foundUser.getEmail()).build();
+        return AuthResponse.builder().token(token).role(foundUser.getRol().getName()).password(foundUser.getPassword()).username(foundUser.getEmail()).id(foundUser.getId()).build();
     }
 
 
