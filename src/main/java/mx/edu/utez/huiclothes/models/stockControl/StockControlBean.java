@@ -4,6 +4,7 @@ package mx.edu.utez.huiclothes.models.stockControl;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import mx.edu.utez.huiclothes.models.color.ColorBean;
 import mx.edu.utez.huiclothes.models.order.OrderBean;
 import mx.edu.utez.huiclothes.models.products.ProductBean;
@@ -14,9 +15,13 @@ import java.util.Set;
 @Entity
 @Table(name = "stock_control")
 @Data
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+
 public class StockControlBean {
 
     @Id
+    @EqualsAndHashCode.Include
+
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
