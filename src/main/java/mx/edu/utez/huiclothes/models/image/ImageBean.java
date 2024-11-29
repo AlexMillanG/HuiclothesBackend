@@ -1,5 +1,6 @@
 package mx.edu.utez.huiclothes.models.image;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import mx.edu.utez.huiclothes.models.color.ColorBean;
@@ -19,6 +20,7 @@ public class ImageBean {
     private byte[] image;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "products_id_products")
     private ProductBean productBean;
 
@@ -26,4 +28,6 @@ public class ImageBean {
     @ManyToOne
     @JoinColumn(name = "colors_id_colors")
     private ColorBean colorBean;
+
+
 }

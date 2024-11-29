@@ -3,6 +3,8 @@ package mx.edu.utez.huiclothes.config;
 
 import mx.edu.utez.huiclothes.models.category.CategoryBean;
 import mx.edu.utez.huiclothes.models.category.CategoryRepository;
+import mx.edu.utez.huiclothes.models.imageCategory.ImageCategoryBean;
+import mx.edu.utez.huiclothes.models.imageCategory.ImageCategoryRepository;
 import mx.edu.utez.huiclothes.models.rol.RoleBean;
 import mx.edu.utez.huiclothes.models.rol.RoleRepository;
 import mx.edu.utez.huiclothes.models.user.UserBean;
@@ -14,6 +16,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Optional;
 
 @Component
@@ -30,6 +36,9 @@ public class InitialConfig {
 
     @Autowired
     private CategoryRepository repository;
+
+    @Autowired
+    private ImageCategoryRepository imageCategoryRepository;
 
     @Bean
     public CommandLineRunner initData(CategoryRepository categoryRepository) {
@@ -85,7 +94,22 @@ public class InitialConfig {
             }
 
 
+            String imagePath = "src/main/resources/categoryImages/blusa.jpg";
+            try {
+                byte[] imageBytes = convertImageToBytes(imagePath);
+                ImageCategoryBean imageCategoryBean = new ImageCategoryBean();
+                imageCategoryBean.setImage(imageBytes);
+                imageCategoryRepository.save(imageCategoryBean);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
         };
+    }
+
+    public byte[] convertImageToBytes(String imagePath) throws IOException {
+        Path path = Paths.get(imagePath);
+        return Files.readAllBytes(path);
     }
 
 

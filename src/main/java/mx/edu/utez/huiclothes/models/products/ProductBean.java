@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import mx.edu.utez.huiclothes.models.category.CategoryBean;
+import mx.edu.utez.huiclothes.models.image.ImageBean;
 import mx.edu.utez.huiclothes.models.order.OrderBean;
 //este es el bueno
 import java.time.LocalDate;
@@ -33,6 +34,10 @@ public class ProductBean {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id", nullable = false)
     private CategoryBean category;
+
+    @OneToMany(mappedBy = "productBean")
+
+    private List<ImageBean> images = new ArrayList<>();
 
 
 }
