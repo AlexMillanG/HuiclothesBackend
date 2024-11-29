@@ -23,9 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Transactional(rollbackFor = SQLException.class)
 @AllArgsConstructor
@@ -34,29 +32,25 @@ public class OrderService {
 
     private final OrderRepository repository;
     private final StockControlRepository stockControlRepository;
-    private final ProductRepository productRepository;
-    private final ColorRepository colorRepository;
-    private final SizeRepository sizeRepository;
     private final UserRepository userRepository;
     private final AddressRepository addressRepository;
 
     @Transactional(rollbackFor = SQLException.class)
     public ResponseEntity<ApiResponse> saveOrder(OrderBean orderBean) {
 
-
         Optional<UserBean> foundUser = userRepository.findById(orderBean.getUserBean().getId());
         if (foundUser.isEmpty())
-            return new ResponseEntity<>(new ApiResponse("error, el usuario que intenta crear la orden, no existe",true,HttpStatus.NOT_FOUND,null), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new ApiResponse("error, el usuario que intenta crear la orden, no existe", true, HttpStatus.NOT_FOUND, null), HttpStatus.NOT_FOUND);
 
         UserDto userDto = new UserDto(foundUser.get());
 
         Optional<AddressBean> foundAddress = addressRepository.findById(orderBean.getAddressBean().getId());
         if (foundAddress.isEmpty())
-            return new ResponseEntity<>(new ApiResponse("error, la dirección que intentas asociar a la orden",true,HttpStatus.NOT_FOUND,null), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new ApiResponse("error, la dirección que intentas asociar a la orden no existe", true, HttpStatus.NOT_FOUND, null), HttpStatus.NOT_FOUND);
 
         AddressDto addressDto = new AddressDto(foundAddress.get());
 
-        List<StockControlBean> updatedStockControls = new ArrayList<>();
+        Set<StockControlBean> updatedStockControls = new HashSet<>();
         double total = 0;
 
         for (StockControlBean stockControlBean : orderBean.getStockControlBeans()) {
@@ -87,21 +81,29 @@ public class OrderService {
             total += productPrice * stockControlBean.getStock();
 
             existingStockControl.setStock(existingStockControl.getStock() - stockControlBean.getStock());
-            updatedStockControls.add(stockControlRepository.save(existingStockControl));
+            updatedStockControls.add(existingStockControl);
         }
 
-
+        // Actualizar las relaciones bidireccionales
+        for (StockControlBean updatedStockControl : updatedStockControls) {
+            updatedStockControl.getOrderBeans().add(orderBean); // Agregar la orden al stock
+        }
+        orderBean.setStockControlBeans(updatedStockControls); // Asignar el stock actualizado a la orden
         orderBean.setDate(LocalDate.now());
         orderBean.setTotal(total);
         orderBean.setStatus("COMMITED");
 
+        // Guardar la orden
         OrderBean savedOrder = repository.save(orderBean);
 
+        // Guardar los cambios en stock_control
+        for (StockControlBean updatedStockControl : updatedStockControls) {
+            stockControlRepository.save(updatedStockControl);
+        }
 
-        OrderDto orderDto = new OrderDto(savedOrder,addressDto,userDto,savedOrder.getStockControlBeans());  // Convierte la orden guardada a un DTO
+        // Crear el DTO para la respuesta
+        OrderDto orderDto = new OrderDto(savedOrder, addressDto, userDto, savedOrder.getStockControlBeans());
 
-
-        System.err.println("antes del return");
         return new ResponseEntity<>(new ApiResponse(
                 "Orden guardada con éxito.",
                 false,
@@ -109,6 +111,22 @@ public class OrderService {
                 orderDto
         ), HttpStatus.CREATED);
     }
+
+    @Transactional(rollbackFor = SQLException.class)
+    public ResponseEntity<ApiResponse> findByUserId(Long id){
+        Optional<UserBean> foundUser = userRepository.findById(id);
+
+        if (foundUser.isEmpty())
+            return new ResponseEntity<>(new ApiResponse("no se econtró el usuario",true,HttpStatus.NOT_FOUND,null),HttpStatus.NOT_FOUND);
+
+        List<OrderBean> foundOrders = repository.findByUserBean(foundUser.get());
+
+        if (foundOrders.isEmpty())
+            return new ResponseEntity<>(new ApiResponse("el usuario proporcionado no cuenta con ordenes",true,HttpStatus.OK,null),HttpStatus.NOT_FOUND);
+
+        return new ResponseEntity<>(new ApiResponse(foundOrders,HttpStatus.OK),HttpStatus.OK);
+    }
+
 
 
 }

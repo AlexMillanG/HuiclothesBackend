@@ -24,10 +24,6 @@ public class OrderDto {
     // Constructor que convierte la entidad OrderBean a OrderDto
     public OrderDto(OrderBean order, AddressDto addressDto, UserDto userDto, Set<StockControlBean> stockControlBeans) {
 
-        for (StockControlBean stockControlBean : stockControlBeans){
-            stockControlBean = stockControlRepository.findById(stockControlBean.getId()).get();
-        }
-
 
         this.id = order.getId();
         this.total = order.getTotal();

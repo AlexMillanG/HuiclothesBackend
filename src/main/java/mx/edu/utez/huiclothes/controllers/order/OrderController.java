@@ -24,4 +24,9 @@ public class OrderController {
         return orderService.saveOrder(orderBean);
     }
 
+    @GetMapping("/findByUser/{id}")
+    public ResponseEntity<ApiResponse> findByUserId(@PathVariable Long id){
+        return orderService.findByUserId(id);
+    }
+
 }
