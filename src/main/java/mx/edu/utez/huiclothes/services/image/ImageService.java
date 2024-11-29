@@ -92,4 +92,22 @@ public class ImageService {
     public ResponseEntity<ApiResponse> updateImage(){
         return null;
     }
+
+    @Transactional(rollbackFor = SQLException.class)
+    public ResponseEntity<ApiResponse> findByProductId(Long id){
+
+        Optional<ProductBean> foundProduct = productRepository.findById(id);
+        if (foundProduct.isEmpty())
+            return new ResponseEntity<>(new ApiResponse("el producto al cual el quieres buscar imagenes no existe",true,HttpStatus.NOT_FOUND,null),HttpStatus.NOT_FOUND);
+
+        List<ImageBean> foundImages = imageRepository.findByProductBean(foundProduct.get());
+
+        if (foundImages.isEmpty())
+            return new ResponseEntity<>(new ApiResponse("no sé encontraron imagenes del producto "+ foundProduct.get().getName(),false,HttpStatus.NOT_FOUND,null),HttpStatus.NOT_FOUND);
+
+        return new ResponseEntity<>(new ApiResponse(foundImages,HttpStatus.OK),HttpStatus.OK);
+
+    }
+
+
 }

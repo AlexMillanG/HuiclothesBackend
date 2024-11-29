@@ -25,6 +25,8 @@ public class ImageController {
     }
 
 
+
+
     @PostMapping("/associate/{productId}/{colorId}")
     public ResponseEntity<ApiResponse> associateImages(
             @PathVariable Long productId,
@@ -43,6 +45,11 @@ public class ImageController {
     @GetMapping("/findOne{id}")
     public ResponseEntity<ApiResponse> findOne(@PathVariable Long id){
         return service.findOne(id);
+    }
+
+    @GetMapping("findByProductId/{id}")
+    public ResponseEntity<ApiResponse> findByProductId(@PathVariable Long id){
+        return service.findByProductId(id);
     }
 
 }

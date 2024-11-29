@@ -6,6 +6,9 @@ import mx.edu.utez.huiclothes.models.category.CategoryBean;
 import mx.edu.utez.huiclothes.services.categories.CategoryService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/api/category")
@@ -28,5 +31,12 @@ public class CategoryController {
     }
 
 
+    @PostMapping("/saveWithImg")
+    public ResponseEntity<ApiResponse> saveWithImage( @RequestParam("name") String name,
+                                                      @RequestParam("image") MultipartFile imageFile) throws IOException {
+        System.err.println(name);
+
+        return service.saveWithImage(name, imageFile);
+    }
 
 }
