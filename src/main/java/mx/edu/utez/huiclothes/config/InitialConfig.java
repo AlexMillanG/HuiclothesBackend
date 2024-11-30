@@ -94,12 +94,86 @@ public class InitialConfig {
             }
 
 
-            String imagePath = "src/main/resources/categoryImages/blusa.jpg";
+            String blusa = "src/main/resources/categoryImages/blusa.jpg";
+            String pantalon = "src/main/resources/categoryImages/cargo.jpg";
+            String sudadera = "src/main/resources/categoryImages/hoddie.jpg";
+            String tenis = "src/main/resources/categoryImages/jumpman-jack.jpg";
+            String shorts = "src/main/resources/categoryImages/short.jpg";
+            String vestido = "src/main/resources/categoryImages/vestido.jpg";
             try {
-                byte[] imageBytes = convertImageToBytes(imagePath);
-                ImageCategoryBean imageCategoryBean = new ImageCategoryBean();
-                imageCategoryBean.setImage(imageBytes);
-                imageCategoryRepository.save(imageCategoryBean);
+
+                // Categoría blusa con imagen
+                byte[] blusaBytes = convertImageToBytes(blusa);
+                ImageCategoryBean imageCategoryBeanBlusa = new ImageCategoryBean();
+                imageCategoryBeanBlusa.setImage(blusaBytes);
+                ImageCategoryBean savedImagesBlusa = imageCategoryRepository.save(imageCategoryBeanBlusa);
+                CategoryBean categoryBeanBlusa = new CategoryBean();
+                categoryBeanBlusa.setImage(savedImagesBlusa);
+                categoryBeanBlusa.setName("blusas");
+                categoryRepository.save(categoryBeanBlusa);
+                System.err.println("categoría blusas con imagenes insertados");
+
+
+                // Categoría pantalón con imagen
+                byte[] pantalonBytes = convertImageToBytes(pantalon);
+                ImageCategoryBean imageCategoryBeanPantalon = new ImageCategoryBean();
+                imageCategoryBeanPantalon.setImage(pantalonBytes);
+                ImageCategoryBean savedImagesPantalon = imageCategoryRepository.save(imageCategoryBeanPantalon);
+                CategoryBean categoryBeanPantalon = new CategoryBean();
+                categoryBeanPantalon.setImage(savedImagesPantalon);
+                categoryBeanPantalon.setName("pantalones");
+                categoryRepository.save(categoryBeanPantalon);
+                System.err.println("categoría pantalones con imagenes insertados");
+
+
+                // Categoría sudadera con imagen
+                byte[] sudaderaBytes = convertImageToBytes(sudadera);
+                ImageCategoryBean imageCategoryBeanSudadera = new ImageCategoryBean();
+                imageCategoryBeanSudadera.setImage(sudaderaBytes);
+                ImageCategoryBean savedImagesSudadera = imageCategoryRepository.save(imageCategoryBeanSudadera);
+                CategoryBean categoryBeanSudadera = new CategoryBean();
+                categoryBeanSudadera.setImage(savedImagesSudadera);
+                categoryBeanSudadera.setName("sudaderas");
+                categoryRepository.save(categoryBeanSudadera);
+                System.err.println("categoría sudadera con imagenes insertados");
+
+
+                // Categoría tenis con imagen
+                byte[] tenisBytes = convertImageToBytes(tenis);
+                ImageCategoryBean imageCategoryBeanTenis = new ImageCategoryBean();
+                imageCategoryBeanTenis.setImage(tenisBytes);
+                ImageCategoryBean savedImagesTenis = imageCategoryRepository.save(imageCategoryBeanTenis);
+                CategoryBean categoryBeanTenis = new CategoryBean();
+                categoryBeanTenis.setImage(savedImagesTenis);
+                categoryBeanTenis.setName("tenis");
+                categoryRepository.save(categoryBeanTenis);
+                System.err.println("categoría tenis con imagenes insertados");
+
+
+                // Categoría shorts con imagen
+                byte[] shortsBytes = convertImageToBytes(shorts);
+                ImageCategoryBean imageCategoryBeanShorts = new ImageCategoryBean();
+                imageCategoryBeanShorts.setImage(shortsBytes);
+                ImageCategoryBean savedImagesShorts = imageCategoryRepository.save(imageCategoryBeanShorts);
+                CategoryBean categoryBeanShorts = new CategoryBean();
+                categoryBeanShorts.setImage(savedImagesShorts);
+                categoryBeanShorts.setName("shorts");
+                categoryRepository.save(categoryBeanShorts);
+                System.err.println("categoría shorts con imagenes insertados");
+
+
+                // Categoría vestido con imagen
+                byte[] vestidoBytes = convertImageToBytes(vestido);
+                ImageCategoryBean imageCategoryBeanVestido = new ImageCategoryBean();
+                imageCategoryBeanVestido.setImage(vestidoBytes);
+                ImageCategoryBean savedImagesVestido = imageCategoryRepository.save(imageCategoryBeanVestido);
+                CategoryBean categoryBeanVestido = new CategoryBean();
+                categoryBeanVestido.setImage(savedImagesVestido);
+                categoryBeanVestido.setName("vestidos");
+                categoryRepository.save(categoryBeanVestido);
+                System.err.println("categoría vestidos con imagenes insertados");
+
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
