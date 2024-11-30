@@ -29,4 +29,20 @@ public class OrderController {
         return orderService.findByUserId(id);
     }
 
+    @GetMapping("/findStats")
+    public ResponseEntity<ApiResponse> findStats(){
+        return orderService.getSalesStats();
+    }
+
+    @GetMapping("/findMostSoldProduct")
+    public ResponseEntity<ApiResponse> mostSoldProduct(){
+        return orderService.mostSoldProduct();
+    }
+
+    @GetMapping("/findHistoricalSale")
+    public ResponseEntity<ApiResponse> historicalSale(){
+        return orderService.historicalSale();
+    }
+
+
 }

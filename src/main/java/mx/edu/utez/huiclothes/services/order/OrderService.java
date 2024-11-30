@@ -9,6 +9,7 @@ import mx.edu.utez.huiclothes.models.color.ColorRepository;
 import mx.edu.utez.huiclothes.models.order.OrderBean;
 import mx.edu.utez.huiclothes.models.order.OrderRepository;
 import mx.edu.utez.huiclothes.models.order.dto.OrderDto;
+import mx.edu.utez.huiclothes.models.order.dto.SalesDto;
 import mx.edu.utez.huiclothes.models.products.ProductRepository;
 import mx.edu.utez.huiclothes.models.size.SizeRepository;
 import mx.edu.utez.huiclothes.models.stockControl.StockControlBean;
@@ -127,6 +128,49 @@ public class OrderService {
         return new ResponseEntity<>(new ApiResponse(foundOrders,HttpStatus.OK),HttpStatus.OK);
     }
 
+    @Transactional(rollbackFor = SQLException.class)
+    public Double getTodayTotalSales() {
+        return repository.findTodayTotalSales();
+    }
 
+    @Transactional(rollbackFor = SQLException.class)
+    public Double getMonthlyTotalSales() {
+        LocalDate startOfMonth = LocalDate.now().withDayOfMonth(1);
+        return repository.findMonthlyTotalSales(startOfMonth);
+    }
+
+    @Transactional(rollbackFor = SQLException.class)
+    public Double getYearlyTotalSales() {
+        LocalDate startOfYear = LocalDate.now().withDayOfYear(1);
+        return repository.findYearlyTotalSales(startOfYear);
+    }
+
+    @Transactional(rollbackFor = SQLException.class)
+    public ResponseEntity<ApiResponse> getSalesStats(){
+
+        LocalDate startOfMonth = LocalDate.now().withDayOfMonth(1);
+        LocalDate startOfYear = LocalDate.now().withDayOfYear(1);
+
+        SalesDto salesDto = new SalesDto();
+        salesDto.setYear(repository.findYearlyTotalSales(startOfYear));
+        salesDto.setMonth(repository.findMonthlyTotalSales(startOfMonth));
+        salesDto.setToday(repository.findTodayTotalSales());
+
+         return new ResponseEntity<>(new ApiResponse(salesDto,HttpStatus.OK),HttpStatus.OK);
+
+    }
+
+    @Transactional(rollbackFor = SQLException.class)
+    public ResponseEntity<ApiResponse> mostSoldProduct(){
+        return new ResponseEntity<>(new ApiResponse(repository.findMostSoldProduct(),HttpStatus.OK),HttpStatus.OK);
+    }
+
+
+    @Transactional(rollbackFor = SQLException.class)
+    public ResponseEntity<ApiResponse> historicalSale(){
+        SalesDto salesDto = new SalesDto();
+        salesDto.setTotal(repository.findTotalSales());;
+        return new ResponseEntity<>(new ApiResponse(salesDto,HttpStatus.OK),HttpStatus.OK);
+    }
 
 }
