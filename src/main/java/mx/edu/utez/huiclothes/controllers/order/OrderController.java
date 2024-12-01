@@ -1,5 +1,6 @@
 package mx.edu.utez.huiclothes.controllers.order;
 
+import jakarta.mail.MessagingException;
 import lombok.AllArgsConstructor;
 import mx.edu.utez.huiclothes.config.ApiResponse;
 import mx.edu.utez.huiclothes.models.order.OrderBean;
@@ -20,7 +21,7 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping("/save")
-    public ResponseEntity<ApiResponse> createOrder(@RequestBody OrderBean orderBean){
+    public ResponseEntity<ApiResponse> createOrder(@RequestBody OrderBean orderBean) throws MessagingException {
         return orderService.saveOrder(orderBean);
     }
 
@@ -42,6 +43,11 @@ public class OrderController {
     @GetMapping("/findHistoricalSale")
     public ResponseEntity<ApiResponse> historicalSale(){
         return orderService.historicalSale();
+    }
+
+    @PutMapping("/cancelOrder/{id}")
+    public ResponseEntity<ApiResponse> cancelOrder(@PathVariable Long id){
+        return orderService.cancelOrder(id);
     }
 
 

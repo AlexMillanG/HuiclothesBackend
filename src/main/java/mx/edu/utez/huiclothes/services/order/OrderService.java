@@ -1,5 +1,6 @@
 package mx.edu.utez.huiclothes.services.order;
 
+import jakarta.mail.MessagingException;
 import lombok.AllArgsConstructor;
 import mx.edu.utez.huiclothes.config.ApiResponse;
 import mx.edu.utez.huiclothes.controllers.address.dto.AddressDto;
@@ -10,6 +11,7 @@ import mx.edu.utez.huiclothes.models.order.OrderBean;
 import mx.edu.utez.huiclothes.models.order.OrderRepository;
 import mx.edu.utez.huiclothes.models.order.dto.OrderDto;
 import mx.edu.utez.huiclothes.models.order.dto.SalesDto;
+import mx.edu.utez.huiclothes.models.products.ProductBean;
 import mx.edu.utez.huiclothes.models.products.ProductRepository;
 import mx.edu.utez.huiclothes.models.size.SizeRepository;
 import mx.edu.utez.huiclothes.models.stockControl.StockControlBean;
@@ -17,6 +19,7 @@ import mx.edu.utez.huiclothes.models.stockControl.StockControlRepository;
 import mx.edu.utez.huiclothes.models.user.UserBean;
 import mx.edu.utez.huiclothes.models.user.UserRepository;
 import mx.edu.utez.huiclothes.models.user.dto.UserDto;
+import mx.edu.utez.huiclothes.services.email.EmailServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -35,9 +38,11 @@ public class OrderService {
     private final StockControlRepository stockControlRepository;
     private final UserRepository userRepository;
     private final AddressRepository addressRepository;
+    private final EmailServiceImpl emailService;
+    private final ProductRepository productRepository;
 
     @Transactional(rollbackFor = SQLException.class)
-    public ResponseEntity<ApiResponse> saveOrder(OrderBean orderBean) {
+    public ResponseEntity<ApiResponse> saveOrder(OrderBean orderBean) throws MessagingException {
 
         Optional<UserBean> foundUser = userRepository.findById(orderBean.getUserBean().getId());
         if (foundUser.isEmpty())
@@ -96,6 +101,30 @@ public class OrderService {
 
         // Guardar la orden
         OrderBean savedOrder = repository.save(orderBean);
+
+
+        Set<ProductBean> productBeans = new HashSet<>();
+        for (StockControlBean stockControlBean: orderBean.getStockControlBeans()){
+            ProductBean productBean = new ProductBean();
+
+            productBean = productRepository.getById(stockControlBean.getProduct().getId());
+            productBeans.add(productBean);
+        }
+
+
+        List<Map<String, Object>> productos = productBeans.stream().map(product -> {
+            Map<String, Object> producto = new HashMap<>();
+            producto.put("name", product.getName());
+            producto.put("description", product.getDescription());
+            producto.put("price", product.getPrice());
+            return producto;
+        }).toList();
+
+
+
+
+        emailService.sendMail(savedOrder, productos, userDto);
+
 
         // Guardar los cambios en stock_control
         for (StockControlBean updatedStockControl : updatedStockControls) {
@@ -171,6 +200,22 @@ public class OrderService {
         SalesDto salesDto = new SalesDto();
         salesDto.setTotal(repository.findTotalSales());;
         return new ResponseEntity<>(new ApiResponse(salesDto,HttpStatus.OK),HttpStatus.OK);
+    }
+
+
+
+    @Transactional(rollbackFor = SQLException.class)
+    public ResponseEntity<ApiResponse> cancelOrder(Long id){
+
+        Optional<OrderBean> foundOrder = repository.findById(id);
+
+        if (foundOrder.isEmpty())
+            return new ResponseEntity<>(new ApiResponse("no se encontró la orden que quieres cancelar",true,HttpStatus.NOT_FOUND,null),HttpStatus.NOT_FOUND);
+
+        OrderBean orderBean = foundOrder.get();
+
+        orderBean.setStatus("CANCELED");
+        return new ResponseEntity<>(new ApiResponse("orden cancelada con exito",false,HttpStatus.OK,repository.saveAndFlush(orderBean)),HttpStatus.OK);
     }
 
 }
