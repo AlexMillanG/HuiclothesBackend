@@ -43,9 +43,6 @@ public class UserBean implements UserDetails {
 
 
 
-
-
-
     //chingaderas de seguridad
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

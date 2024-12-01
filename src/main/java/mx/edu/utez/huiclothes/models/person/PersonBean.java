@@ -24,6 +24,10 @@ public class PersonBean {
     @Column(length = 100)
     private String surname;
 
+
+    public PersonBean() {
+    }
+
     @JsonIgnore
     @OneToOne(mappedBy = "person")
     private UserBean user;

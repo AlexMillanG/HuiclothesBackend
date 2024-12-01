@@ -71,8 +71,32 @@ public class ProductController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<ApiResponse> update(@RequestBody ProductBean productBean){
-        return service.updateProduct(productBean);
+    public ResponseEntity<ApiResponse> update(@RequestBody ProductDto productBean){
+        Gender gender = null;
+        switch (productBean.getGender().toUpperCase()) {
+            case "MALE":
+                gender = Gender.MALE;
+                break;
+            case "FEMALE":
+                gender = Gender.FEMALE;
+                break;
+            case "UNISEX":
+                gender = Gender.UNISEX;
+                break;
+            default:
+                return new ResponseEntity<>(new ApiResponse("Error: El valor de 'gender' es inválido. Los valores válidos son: MALE, FEMALE, UNISEX.", true, HttpStatus.BAD_REQUEST, null), HttpStatus.BAD_REQUEST);
+        }
+
+        ProductBean productBeanDos = new ProductBean();
+        productBeanDos.setId(productBean.getId());
+        productBeanDos.setName(productBean.getName());
+        productBeanDos.setDescription(productBean.getDescription());
+        productBeanDos.setPrice(productBean.getPrice());
+        productBeanDos.setGender(gender);
+        productBeanDos.setCategory(productBean.getCategory());
+
+
+        return service.updateProduct(productBeanDos);
     }
 
 

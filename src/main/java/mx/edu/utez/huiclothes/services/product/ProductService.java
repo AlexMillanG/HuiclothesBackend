@@ -95,7 +95,7 @@ public class ProductService {
         if (foundCategory.isEmpty())
             return new ResponseEntity<>(new ApiResponse("error, la categoría que intentas asociar al producto, no existe", true,HttpStatus.BAD_REQUEST,null),HttpStatus.BAD_REQUEST);
 
-        return new ResponseEntity<>(new ApiResponse("producto Guaradado con exito",false,HttpStatus.OK, repository.saveAndFlush(productBean)),HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponse("producto actualizado con exito con exito",false,HttpStatus.OK, repository.saveAndFlush(productBean)),HttpStatus.OK);
 
     }
 
