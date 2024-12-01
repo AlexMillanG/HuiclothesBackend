@@ -2,6 +2,7 @@ package mx.edu.utez.huiclothes.services.address;
 
 import lombok.AllArgsConstructor;
 import mx.edu.utez.huiclothes.config.ApiResponse;
+import mx.edu.utez.huiclothes.controllers.address.dto.AddressDto;
 import mx.edu.utez.huiclothes.models.address.AddressBean;
 import mx.edu.utez.huiclothes.models.address.AddressRepository;
 import mx.edu.utez.huiclothes.models.user.UserBean;
@@ -26,6 +27,7 @@ public class AddressService {
 
     @Transactional(rollbackFor = {SQLException.class})
     public ResponseEntity<ApiResponse> createAddress(AddressBean addressBean) {
+        System.err.println("en el save del service");
         Optional<UserBean> foundUser = userRepository.findById(addressBean.getUserBean().getId());
         if (foundUser.isEmpty())
         return new ResponseEntity<>(new ApiResponse("no existe el usuario al que intentas asociar la  dirección", false, HttpStatus.NOT_FOUND, null), HttpStatus.NOT_FOUND);
@@ -56,7 +58,12 @@ public class AddressService {
             return new ResponseEntity<>(new ApiResponse("ingresa una provincia (municipio) valido", false, HttpStatus.BAD_REQUEST, null), HttpStatus.BAD_REQUEST);
 
         AddressBean savedAddress = addressRepository.save(addressBean);
-        return new ResponseEntity<>(new ApiResponse("Address created", false, HttpStatus.OK, savedAddress), HttpStatus.OK);
+
+        AddressDto  addressDto = new AddressDto(savedAddress);
+        System.err.println(addressDto);
+
+        System.err.println("antes de la response");
+        return new ResponseEntity<>(new ApiResponse("Address created", false, HttpStatus.OK, savedAddress,foundUser.get().getId()), HttpStatus.OK);
     }
 
     public ResponseEntity<ApiResponse> getAddressById(Long id) {
@@ -101,7 +108,7 @@ public class AddressService {
             return new ResponseEntity<>(new ApiResponse("ingresa una provincia (municipio) valido", false, HttpStatus.BAD_REQUEST, null), HttpStatus.BAD_REQUEST);
 
         AddressBean savedAddress = addressRepository.save(addressBean);
-        return new ResponseEntity<>(new ApiResponse("Address created", false, HttpStatus.OK, savedAddress), HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponse("Address created", false, HttpStatus.OK, savedAddress,foundUser.get().getId()), HttpStatus.OK);
 
     }
 
