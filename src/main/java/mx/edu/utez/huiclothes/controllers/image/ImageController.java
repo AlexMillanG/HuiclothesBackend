@@ -32,8 +32,6 @@ public class ImageController {
             @PathVariable Long productId,
             @PathVariable Long colorId,
             @RequestParam("images") List<MultipartFile> images) {
-        System.err.println(productId);
-        System.err.println(colorId);
         return service.associateImagesWithFiles(productId, colorId, images);
     }
 

@@ -28,7 +28,6 @@ public class AddressController {
 
     @PostMapping("/save")
     public ResponseEntity<ApiResponse> save(@RequestBody AddressDto addressBean) {
-        System.err.println(addressBean.getUserBean());
         return addressService.createAddress(addressBean.toEntity());
     }
 

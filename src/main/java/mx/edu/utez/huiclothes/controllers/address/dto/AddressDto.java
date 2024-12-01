@@ -24,6 +24,10 @@ public class AddressDto {
         return  new AddressBean(id,street,country,state,zipCode,phoneNumber,neighborhood,fullName,province,userBean);
     }
 
+    public AddressDto() {
+
+    }
+
 
     UserDto userDto;  // Cambié UserBean a UserDto
 
