@@ -34,6 +34,10 @@ public class UserService {
 
     @Transactional(rollbackFor = SQLException.class)
     public ResponseEntity<ApiResponse> findById(Long id){
+        Optional<UserBean> foundUser = repository.findById(id);
+        if (foundUser.isEmpty())
+            return new ResponseEntity<>(new ApiResponse("usuario no encontrado",true,HttpStatus.NOT_FOUND,null,null),HttpStatus.NOT_FOUND);
+
         return new ResponseEntity<>(new ApiResponse(repository.findById(id),HttpStatus.OK), HttpStatus.OK);
     }
 
@@ -92,6 +96,54 @@ public class UserService {
                 HttpStatus.OK
         );
     }
+
+
+
+    @Transactional(rollbackFor = SQLException.class)
+    public ResponseEntity<ApiResponse> saveSeller(UserBean userBean) {
+        // Validación de la longitud de la contraseña
+        if (userBean.getPassword().length() < 8) {
+            return new ResponseEntity<>(
+                    new ApiResponse("Error, la contraseña es menor a 8 caracteres", true, HttpStatus.BAD_REQUEST, null),
+                    HttpStatus.BAD_REQUEST
+            );
+        }
+
+        // Validación del formato del email usando una expresión regular
+        String emailRegex = "^[\\w-\\.]+@[\\w-]+\\.[a-zA-Z]{2,}$";
+        if (!userBean.getEmail().matches(emailRegex)) {
+            return new ResponseEntity<>(
+                    new ApiResponse("Error, el email tiene un formato inválido", true, HttpStatus.BAD_REQUEST, null),
+                    HttpStatus.BAD_REQUEST
+            );
+        }
+
+
+
+        if (userBean.getPerson().getName().equals("")   || userBean.getPerson().getName().equals(null))
+            return new ResponseEntity<>(new ApiResponse("inserta un nombre valido", true,HttpStatus.BAD_REQUEST,null),HttpStatus.BAD_REQUEST);
+
+
+
+        if (userBean.getPerson().getLastname().equals("")   || userBean.getPerson().getLastname().equals(null))
+            return new ResponseEntity<>(new ApiResponse("inserta un apellido  valido", true,HttpStatus.BAD_REQUEST,null),HttpStatus.BAD_REQUEST);
+
+
+
+
+        RoleBean roleBean = new RoleBean();
+        roleBean.setId(2L);
+
+        // Si todas las validaciones pasan, se guarda el usuario
+        userBean.setRol(roleBean);
+
+
+        return new ResponseEntity<>(
+                new ApiResponse("Usuario guardado exitosamente", false, HttpStatus.OK, repository.save(userBean)),
+                HttpStatus.OK
+        );
+    }
+
 
     @Transactional(rollbackFor = SQLException.class)
     public ResponseEntity<ApiResponse> updateUser(UserBean userBean) {

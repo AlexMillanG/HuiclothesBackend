@@ -21,6 +21,7 @@ public class MailController {
 
     @GetMapping("/")
     public void sendEmail () throws MessagingException {
-        emailServiceDos.sendMail();
+        //emailServiceDos.sendMail();
+
     }
 }

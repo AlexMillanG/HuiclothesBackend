@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import mx.edu.utez.huiclothes.config.ApiResponse;
 import mx.edu.utez.huiclothes.models.category.CategoryBean;
 import mx.edu.utez.huiclothes.models.category.CategoryRepository;
+import mx.edu.utez.huiclothes.models.products.Gender;
 import mx.edu.utez.huiclothes.models.products.ProductBean;
 import mx.edu.utez.huiclothes.models.products.ProductRepository;
 import org.springframework.http.HttpStatus;
@@ -47,13 +48,22 @@ public class ProductService {
         if (foundProduct.isEmpty())
         return new ResponseEntity<>(new ApiResponse("error, el producto que intentas eliminar no exite", true,HttpStatus.NOT_FOUND,null),HttpStatus.NOT_FOUND);
 
+        ProductBean productBean = foundProduct.get();
         repository.deleteById(id);
-        return new ResponseEntity<>(new ApiResponse("producto eliminado con exito", HttpStatus.OK),HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponse("producto " +productBean.getName() + " eliminado con éxito",false ,HttpStatus.OK,productBean),HttpStatus.OK);
     }
 
     //save
     @Transactional(rollbackFor = SQLException.class)
     public ResponseEntity<ApiResponse> save(ProductBean productBean){
+
+        System.err.println(productBean.getGender().toString());
+        try {
+            Gender gender = Gender.valueOf(productBean.getGender().toString().toUpperCase()); // Asumimos que el campo gender es un String en la entidad ProductBean
+            productBean.setGender(gender); // Establecer el género válido
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(new ApiResponse("error, el valor de género es inválido. Los valores válidos son: MALE, FEMALE, UNISEX", true, HttpStatus.BAD_REQUEST, null), HttpStatus.BAD_REQUEST);
+        }
 
         productBean.setEntry_date(LocalDate.now());
         if (productBean.getPrice()<0L)
@@ -85,7 +95,7 @@ public class ProductService {
         if (foundCategory.isEmpty())
             return new ResponseEntity<>(new ApiResponse("error, la categoría que intentas asociar al producto, no existe", true,HttpStatus.BAD_REQUEST,null),HttpStatus.BAD_REQUEST);
 
-        return new ResponseEntity<>(new ApiResponse("producto Guaradado con exito",false,HttpStatus.OK, repository.saveAndFlush(productBean)),HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponse("producto actualizado con exito con exito",false,HttpStatus.OK, repository.saveAndFlush(productBean)),HttpStatus.OK);
 
     }
 
@@ -101,6 +111,10 @@ public class ProductService {
         return new ResponseEntity<>(new ApiResponse(repository.findByCategory(categoryBean),HttpStatus.OK),HttpStatus.OK);
 
     }
+
+
+
+
 
 
 }

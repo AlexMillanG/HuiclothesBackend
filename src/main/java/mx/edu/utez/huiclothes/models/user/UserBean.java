@@ -1,10 +1,7 @@
 package mx.edu.utez.huiclothes.models.user;
 //este es el bueno
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import mx.edu.utez.huiclothes.models.address.AddressBean;
 import mx.edu.utez.huiclothes.models.log.LogBean;
 import mx.edu.utez.huiclothes.models.person.PersonBean;
@@ -23,6 +20,8 @@ import java.util.Set;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode(exclude = {"addressBeans"})
+
 public class UserBean implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,9 +40,6 @@ public class UserBean implements UserDetails {
     @OneToOne
     @JoinColumn(name = "person_id")
     private PersonBean person;
-
-
-
 
 
 

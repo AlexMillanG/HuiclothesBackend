@@ -2,6 +2,8 @@ package mx.edu.utez.huiclothes.controllers.user;
 
 import lombok.RequiredArgsConstructor;
 import mx.edu.utez.huiclothes.config.ApiResponse;
+import mx.edu.utez.huiclothes.models.user.UserBean;
+import mx.edu.utez.huiclothes.models.user.dto.UserDto;
 import mx.edu.utez.huiclothes.services.user.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -15,13 +17,11 @@ public class UserController {
 
     private final UserService userService;
 
-    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/")
     public ResponseEntity<ApiResponse> findAll(){
         return userService.findAll();
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/findById/{id}")
     public ResponseEntity<ApiResponse> findById(@PathVariable Long id){
         return userService.findById(id);
@@ -31,6 +31,11 @@ public class UserController {
     @DeleteMapping ("/delete/{id}")
     public ResponseEntity<ApiResponse> delete (@PathVariable Long id){
         return userService.delete(id);
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<ApiResponse> update (@RequestBody UserBean dto){
+        return userService.updateUser(dto);
     }
 
 

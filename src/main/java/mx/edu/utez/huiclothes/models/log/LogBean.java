@@ -19,7 +19,7 @@ public class LogBean {
 
 
     @ManyToOne
-    @JoinColumn(name = "id_order")
+    @JoinColumn(name = "id_order", nullable = false)
     private OrderBean orderBean;
 
 }

@@ -3,6 +3,7 @@ package mx.edu.utez.huiclothes.models.category;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
+import mx.edu.utez.huiclothes.models.imageCategory.ImageCategoryBean;
 import mx.edu.utez.huiclothes.models.products.ProductBean;
 
 import java.util.List;
@@ -18,6 +19,9 @@ public class CategoryBean {
 
     @Column(name = "name", length = 45)
     private String name;
+
+    @OneToOne
+    private ImageCategoryBean image;
 
     @JsonIgnore
     @OneToMany(mappedBy = "category", fetch = FetchType.EAGER, cascade = CascadeType.ALL)

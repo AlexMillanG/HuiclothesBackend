@@ -54,32 +54,57 @@
             border-radius: 5px;
             font-weight: bold;
         }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table th, table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        table th {
+            background-color: #0073e6;
+            color: white;
+        }
     </style>
 </head>
 <body>
 <div class="email-container">
     <!-- Encabezado -->
     <div class="header">
-        <h1>¡Gracias por tu solicitud!</h1>
+        <h1>¡Gracias por tu pedido!</h1>
     </div>
 
     <!-- Contenido -->
     <div class="content">
         <h2 th:text="'Hola, ' + ${nombre} + '!'">Hola, Usuario!</h2>
-        <p>Te informamos que hemos recibido tu solicitud para el pedido con el código <strong th:text="${codigoPedido}">#000000</strong>. A continuación, encontrarás los detalles:</p>
-        <ul>
-            <li><strong>Producto:</strong> <span th:text="${message}">Producto Ejemplo</span></li>
-            <li><strong>Cantidad:</strong> <span th:text="${cantidad}">1</span></li>
-            <li><strong>Precio:</strong> <span th:text="${precio}">$100.00</span></li>
-        </ul>
+        <p>Te informamos que hemos recibido tu pedido con el código <strong th:text="${codigoPedido}">#000000</strong>. A continuación, encontrarás los detalles de tu compra:</p>
+        <table>
+            <thead>
+            <tr>
+                <th>Producto</th>
+                <th>Descripción</th>
+                <th>Precio</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="producto : ${productos}">
+                <td th:text="${producto.name}">Nombre del Producto</td>
+                <td th:text="${producto.description}">Descripción del Producto</td>
+                <td th:text="${producto.price}">Precio</td>
+            </tr>
+            </tbody>
+        </table>
         <p>Si tienes alguna pregunta, no dudes en <a href="mailto:soporte@tuempresa.com">contactarnos</a>.</p>
-        <a href="#" class="button" th:href="${linkSeguimiento}">Seguir mi pedido</a>
+        <a href="#" class="button">Seguir mi pedido</a>
     </div>
 
     <!-- Pie de página -->
     <div class="footer">
         <p>&copy; SIMIKE. Todos los derechos reservados.</p>
-        <p>Este mensaje ha sido enviado a correo@ejemplo.com</p>
+        <p>Este mensaje ha sido enviado a <strong th:text="${userEmail}">correo@ejemplo.com</strong></p>
     </div>
 </div>
 </body>
